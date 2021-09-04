@@ -1,0 +1,31 @@
+<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>420</x><y>80</y><w>270</w><h>210</h></coordinates><panel_attributes>/Operador/
+--
+- Nombre: String
+- Email: String
+- FechaAlta: DateTime
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>190</x><y>390</y><w>150</w><h>200</h></coordinates><panel_attributes>Usuario
+--
+- Password: String
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>330</x><y>280</y><w>140</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>120;10;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>630</x><y>280</y><w>40</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;20;80</additional_attributes></element><element><id>UMLClass</id><coordinates><x>590</x><y>360</y><w>230</w><h>230</h></coordinates><panel_attributes>/Persona/
+--
+- Apellido: String
+- Telefono: String
+- Direccion: String
+
+
+
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>340</x><y>660</y><w>240</w><h>170</h></coordinates><panel_attributes>Cliente
+--
+- Dni: String
+- Compras: List
+- Carritos: List
+--
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>650</x><y>650</y><w>160</w><h>200</h></coordinates><panel_attributes>Empleado
+--
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>490</x><y>580</y><w>150</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>130;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>690</x><y>580</y><w>130</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>110;10;10;70</additional_attributes></element></diagram>
