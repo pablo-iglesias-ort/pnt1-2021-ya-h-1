@@ -7,6 +7,7 @@ namespace CarritoCompras.Models
 {
     public class Carrito
     {
+        public Guid Id { get; set; }
         public bool Activo { get; set; }
         public Cliente Cliente { get; set; }
         public List<CarritoItem> CarritosItems { get; set; }
