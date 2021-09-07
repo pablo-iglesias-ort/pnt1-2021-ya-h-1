@@ -15,5 +15,7 @@ namespace CarritoCompras.Data
         }
 
         public DbSet<CarritoCompras.Models.Producto> Producto { get; set; }
+
+        public DbSet<CarritoCompras.Models.Carrito> Carrito { get; set; }
     }
 }
