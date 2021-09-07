@@ -15,5 +15,9 @@ namespace CarritoCompras.Data
         }
 
         public DbSet<CarritoCompras.Models.Producto> Producto { get; set; }
+
+        public DbSet<CarritoCompras.Models.Sucursal> Sucursal { get; set; }
+
+        public DbSet<CarritoCompras.Models.StockItem> StockItem { get; set; }
     }
 }
