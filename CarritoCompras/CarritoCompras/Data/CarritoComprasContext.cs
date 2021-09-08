@@ -16,6 +16,10 @@ namespace CarritoCompras.Data
 
         public DbSet<CarritoCompras.Models.Producto> Producto { get; set; }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f953aa4d2b4ce7d01151ed4f5a2fd2ffff8d01da
         public DbSet<CarritoCompras.Models.Carrito> Carrito { get; set; }
 
         public DbSet<CarritoCompras.Models.Sucursal> Sucursal { get; set; }
