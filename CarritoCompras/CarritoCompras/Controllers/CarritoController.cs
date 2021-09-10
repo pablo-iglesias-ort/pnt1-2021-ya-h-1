@@ -14,6 +14,25 @@ namespace CarritoCompras.Controllers
     {
         private readonly CarritoComprasContext _context;
 
+        static List<Carrito> carritos = new List<Carrito>()
+        {
+            new Carrito()
+            {
+                Id = Guid.NewGuid(),
+                Activo = true,
+                Cliente = new Cliente(),
+                CarritosItems = null,
+                Subtotal = 12345.12
+            },
+            new Carrito()
+            {
+                Id = Guid.NewGuid(),
+                Activo = true,
+                Cliente = new Cliente(),
+                CarritosItems = null,
+                Subtotal = 4578.45
+            }
+        };
         public CarritoController(CarritoComprasContext context)
         {
             _context = context;
@@ -22,7 +41,8 @@ namespace CarritoCompras.Controllers
         // GET: Carrito
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Carrito.ToListAsync());
+            //return View(await _context.Carrito.ToListAsync());
+            return View(carritos);
         }
 
         // GET: Carrito/Details/5
@@ -33,8 +53,8 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var carrito = await _context.Carrito
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var carrito = carritos.FirstOrDefault(e => e.Id == id);
+
             if (carrito == null)
             {
                 return NotFound();
@@ -74,7 +94,8 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var carrito = await _context.Carrito.FindAsync(id);
+            var carrito = BuscarCarrito(id);
+
             if (carrito == null)
             {
                 return NotFound();
@@ -98,8 +119,9 @@ namespace CarritoCompras.Controllers
             {
                 try
                 {
-                    _context.Update(carrito);
-                    await _context.SaveChangesAsync();
+                    var carritoEncontrado = BuscarCarrito(id);
+                    carritoEncontrado.Activo = carrito.Activo;
+                    carritoEncontrado.Subtotal = carrito.Subtotal;
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -149,6 +171,11 @@ namespace CarritoCompras.Controllers
         private bool CarritoExists(Guid id)
         {
             return _context.Carrito.Any(e => e.Id == id);
+        }
+
+        private Carrito BuscarCarrito(Guid? id)
+        {
+            return carritos.FirstOrDefault(e => e.Id == id);
         }
     }
 }
