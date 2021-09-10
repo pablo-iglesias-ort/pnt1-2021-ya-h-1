@@ -13,7 +13,40 @@ namespace CarritoCompras.Controllers
     public class StockItemController : Controller
     {
         private readonly CarritoComprasContext _context;
-
+        static List<StockItem> stockItems = new List<StockItem>()
+        {
+            new StockItem()
+            {
+                Id = Guid.NewGuid(),
+                Sucursal = new Sucursal()
+            {
+                Id = Guid.NewGuid(),
+                Nombre = "Boedo",
+                Direccion = "Av Boedo 264",
+                Telefono = "5555-5555",
+                Email ="sucursal@mail.com",
+                StockItems = null
+    },
+                Producto = null,
+                Cantidad = 23,
+                
+    },
+            new StockItem()
+            {
+                Id = Guid.NewGuid(),
+                Sucursal = new Sucursal()
+            {
+                Id = Guid.NewGuid(),
+                Nombre = "Boedo",
+                Direccion = "Av Boedo 264",
+                Telefono = "5555-5555",
+                Email ="sucursal@mail.com",
+                StockItems = null
+    },
+                Producto = null,
+                Cantidad = 23,
+                },
+        };
         public StockItemController(CarritoComprasContext context)
         {
             _context = context;
@@ -22,7 +55,8 @@ namespace CarritoCompras.Controllers
         // GET: StockItem
         public async Task<IActionResult> Index()
         {
-            return View(await _context.StockItem.ToListAsync());
+            //return View(await _context.StockItem.ToListAsync());
+            return View(stockItems);
         }
 
         // GET: StockItem/Details/5
@@ -33,8 +67,7 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var stockItem = await _context.StockItem
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var stockItem = BuscarStockItem(id);
             if (stockItem == null)
             {
                 return NotFound();
@@ -74,7 +107,7 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var stockItem = await _context.StockItem.FindAsync(id);
+            var stockItem = BuscarStockItem(id);
             if (stockItem == null)
             {
                 return NotFound();
@@ -98,8 +131,8 @@ namespace CarritoCompras.Controllers
             {
                 try
                 {
-                    _context.Update(stockItem);
-                    await _context.SaveChangesAsync();
+                    var stockItemEncontrado = BuscarStockItem(id);
+                    stockItemEncontrado.Cantidad = stockItem.Cantidad;
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -149,6 +182,11 @@ namespace CarritoCompras.Controllers
         private bool StockItemExists(Guid id)
         {
             return _context.StockItem.Any(e => e.Id == id);
+        }
+        private StockItem BuscarStockItem(Guid? id)
+        {
+            var stockItem = stockItems.FirstOrDefault(m => m.Id == id);
+            return stockItem;
         }
     }
 }
