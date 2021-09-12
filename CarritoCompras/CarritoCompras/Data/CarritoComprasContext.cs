@@ -24,11 +24,14 @@ namespace CarritoCompras.Data
 
         public DbSet<CarritoCompras.Models.CarritoItem> CarritoItem { get; set; }
 
-	public DbSet<CarritoCompras.Models.Usuario> Usuario { get; set; }
+	    public DbSet<CarritoCompras.Models.Usuario> Usuario { get; set; }
 
-	public DbSet<CarritoCompras.Models.Empleado> Empleado { get; set; }
+	    public DbSet<CarritoCompras.Models.Empleado> Empleado { get; set; }
 
-	public DbSet<CarritoCompras.Models.Cliente> Cliente { get; set; }
+	    public DbSet<CarritoCompras.Models.Cliente> Cliente { get; set; }
+
+        public DbSet<CarritoCompras.Models.Categoria> Categoria { get; set; }
+
 
     }
 }
