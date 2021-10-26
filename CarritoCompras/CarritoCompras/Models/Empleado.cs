@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CarritoCompras.Models
 {
-    public class Empleado : Persona
+    public class Empleado : Usuario
     {
         [Required(ErrorMessage = "Por favor complete el Apellido")]
 

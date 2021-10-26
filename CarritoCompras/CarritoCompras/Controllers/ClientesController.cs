@@ -10,59 +10,22 @@ using CarritoCompras.Models;
 
 namespace CarritoCompras.Controllers
 {
-    public class ClienteController : Controller
+    public class ClientesController : Controller
     {
-        private CarritoComprasContext _context;
-        static List<Cliente> clientes = new List<Cliente>()
-        { 
-            new Cliente
-            {
-                Id= Guid.NewGuid(),
-                Nombre = "Lautaro",
-                Email = "Lautaro@gmail.com",
-                FechaAlta = new DateTime (2021,9,8),
-                Apellido = "Gomez",
-                Telefono = "12312312",
-                Direccion= "Rioja 3221",
-                Dni = "23444444"
-            },
-            new Cliente
-            {
-                Id= Guid.NewGuid(),
-                Nombre = "Rama",
-                Email = "Rama@gmail.com",
-                FechaAlta = new DateTime (2021,9,8),
-                Apellido = "Rodriguez",
-                Telefono = "12312312",
-                Direccion= "Boedo 3221",
-                Dni = "23444222"
-            },
-            new Cliente
-            {
-                Id= Guid.NewGuid(),
-                Nombre = "Santiago",
-                Email = "Santiago@gmail.com",
-                FechaAlta = new DateTime (2021,9,8),
-                Apellido = "Idalgo",
-                Telefono = "33333333",
-                Direccion= "Lorenzo 3221",
-                Dni = "30444444"
-            },
-        };
+        private readonly CarritoComprasContext _context;
 
-
-        public ClienteController(CarritoComprasContext context)
+        public ClientesController(CarritoComprasContext context)
         {
             _context = context;
         }
 
-        // GET: Cliente
+        // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            return View(clientes);
+            return View(await _context.Cliente.ToListAsync());
         }
 
-        // GET: Cliente/Details/5
+        // GET: Clientes/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -70,7 +33,8 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var cliente = BuscarCliente(id);
+            var cliente = await _context.Cliente
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
                 return NotFound();
@@ -79,18 +43,18 @@ namespace CarritoCompras.Controllers
             return View(cliente);
         }
 
-        // GET: Cliente/Create
+        // GET: Clientes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Cliente/Create
+        // POST: Clientes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Dni,Apellido,Telefono,Direccion,Id,Nombre,Email,FechaAlta")] Cliente cliente)
+        public async Task<IActionResult> Create([Bind("Dni,Id,Nombre,Email,FechaAlta,Password")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
@@ -102,7 +66,7 @@ namespace CarritoCompras.Controllers
             return View(cliente);
         }
 
-        // GET: Cliente/Edit/5
+        // GET: Clientes/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -110,7 +74,7 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var cliente = BuscarCliente(id);
+            var cliente = await _context.Cliente.FindAsync(id);
             if (cliente == null)
             {
                 return NotFound();
@@ -118,12 +82,12 @@ namespace CarritoCompras.Controllers
             return View(cliente);
         }
 
-        // POST: Cliente/Edit/5
+        // POST: Clientes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Dni,Apellido,Telefono,Direccion,Id,Nombre,Email,FechaAlta")] Cliente cliente)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Dni,Id,Nombre,Email,FechaAlta,Password")] Cliente cliente)
         {
             if (id != cliente.Id)
             {
@@ -134,13 +98,8 @@ namespace CarritoCompras.Controllers
             {
                 try
                 {
-                    var clienteEncontrado = BuscarCliente(id);
-                    clienteEncontrado.Apellido = cliente.Apellido;
-                    clienteEncontrado.Nombre = cliente.Nombre;
-                    clienteEncontrado.Direccion = cliente.Direccion;
-                    clienteEncontrado.Telefono = cliente.Telefono;
-                    clienteEncontrado.Email = cliente.Email;
-                    clienteEncontrado.FechaAlta = cliente.FechaAlta;
+                    _context.Update(cliente);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -158,7 +117,7 @@ namespace CarritoCompras.Controllers
             return View(cliente);
         }
 
-        // GET: Cliente/Delete/5
+        // GET: Clientes/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -176,7 +135,7 @@ namespace CarritoCompras.Controllers
             return View(cliente);
         }
 
-        // POST: Cliente/Delete/5
+        // POST: Clientes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -190,13 +149,6 @@ namespace CarritoCompras.Controllers
         private bool ClienteExists(Guid id)
         {
             return _context.Cliente.Any(e => e.Id == id);
-        }
-        private Cliente BuscarCliente(Guid? id)
-        {
-
-
-            var cliente = clientes.FirstOrDefault(u => u.Id == id);
-            return cliente;
         }
     }
 }

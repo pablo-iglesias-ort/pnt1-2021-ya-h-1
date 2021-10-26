@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CarritoCompras.Models
 {
-    public class Cliente : Empleado
+    public class Cliente : Usuario
     {
         [Required(ErrorMessage = "Por favor complete el campo Dni")]
 
