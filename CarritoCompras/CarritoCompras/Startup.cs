@@ -27,7 +27,9 @@ namespace CarritoCompras
             services.AddControllersWithViews();
 
             services.AddDbContext<CarritoComprasContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("CarritoComprasContext")));
+                    options.UseSqlite("filename=BaseDeDatos.db"));
+
+            //UseSqlServer(Configuration.GetConnectionString("CarritoComprasContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
