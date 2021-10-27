@@ -79,15 +79,13 @@ namespace CarritoCompras.Controllers
             if (id == null)
             {
                 return NotFound();
-            }
-            CargarCategorias();
-            var categoria = _context.Categoria.Local.ToList().Find(c => c.Id == id);
+            }            
+            var categoria = await _context.Categoria.FirstOrDefaultAsync(c => c.Id == id);
+           
             if (categoria == null)
             {
                 return NotFound();
             }
-            new ProductoController(_context).CargarProductos();
-            ViewBag.Types = new SelectList(_context.Producto.Local.ToList().Where(p => p.Categoria == null || (p.Categoria != null && p.Categoria.Id == id)), "Id", "Nombre", "0");
             return View(categoria);
         }
 
@@ -107,16 +105,11 @@ namespace CarritoCompras.Controllers
             {
                 try
                 {
-                    _context.Update(categoria);
-                    foreach (Producto p in categoria.Productos){
-                        p.Categoria = categoria;
-                        _context.Update(p);
-                    }
-                    //await _context.SaveChangesAsync();
+                    var categoriaEncontrada = await _context.Categoria.FirstOrDefaultAsync(m => m.Id == id);                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoriaExists(categoria.Id))
+                    if (!_context.Categoria.Any(n => n.Id == categoria.Id))
                     {
                         return NotFound();
                     }
