@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarritoCompras.Migrations
 {
-    public partial class primera : Migration
+    public partial class Base101 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

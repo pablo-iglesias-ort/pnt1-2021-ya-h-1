@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarritoCompras.Migrations
 {
     [DbContext(typeof(CarritoComprasContext))]
-    [Migration("20211027000213_primera")]
-    partial class primera
+    [Migration("20211027010718_Base-1.01")]
+    partial class Base101
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.20");
+                .HasAnnotation("ProductVersion", "3.1.15");
 
             modelBuilder.Entity("CarritoCompras.Models.Carrito", b =>
                 {
