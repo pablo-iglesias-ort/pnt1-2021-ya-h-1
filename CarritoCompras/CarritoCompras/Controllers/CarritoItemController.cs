@@ -13,54 +13,7 @@ namespace CarritoCompras.Controllers
     public class CarritoItemController : Controller
     {
         private readonly CarritoComprasContext _context;
-        static List<CarritoItem> CarritoItems = new List<CarritoItem>()
-        {
-            new CarritoItem()
-            {
-                Id = Guid.NewGuid(),
-                Carrito = new Carrito(),
-                Producto = new Producto(),
-                ValorUnitario = 100,
-                Cantidad = 23,
-                Subtotal = 2834.52
-            },
-             new CarritoItem()
-            {
-                Id = Guid.NewGuid(),
-                Carrito = new Carrito(),
-                Producto = new Producto(),
-                ValorUnitario = 200,
-                Cantidad = 23,
-                Subtotal = 2834.52
-            },
-              new CarritoItem()
-            {
-                Id = Guid.NewGuid(),
-                Carrito = new Carrito(),
-                Producto = new Producto(),
-                ValorUnitario = 300,
-                Cantidad = 23,
-                Subtotal = 2834.52
-            },
-               new CarritoItem()
-            {
-                Id = Guid.NewGuid(),
-                Carrito = new Carrito(),
-                Producto = new Producto(),
-                ValorUnitario = 123.24,
-                Cantidad = 23,
-                Subtotal = 2834.52
-            },
-            new CarritoItem()
-            {
-                Id = Guid.NewGuid(),
-                Carrito = new Carrito(),
-                Producto = new Producto(),
-                ValorUnitario = 250,
-                Cantidad = 2,
-                Subtotal = 500
-            }
-        };
+        
         public CarritoItemController(CarritoComprasContext context)
         {
             _context = context;
@@ -69,8 +22,8 @@ namespace CarritoCompras.Controllers
         // GET: CarritoItem
         public async Task<IActionResult> Index()
         {
-            //return View(await _context.CarritoItem.ToListAsync());
-            return View(CarritoItems);
+            return View(await _context.CarritoItem.ToListAsync());
+            
         }
 
         // GET: CarritoItem/Details/5
@@ -81,7 +34,7 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var carritoItem = BuscarCarritoItem(id);
+            var carritoItem = await _context.CarritoItem.FirstOrDefaultAsync(e => e.Id == id);
             if (carritoItem == null)
             {
                 return NotFound();
@@ -121,7 +74,7 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var carritoItem = BuscarCarritoItem(id);
+            var carritoItem = await _context.CarritoItem.FirstOrDefaultAsync(e => e.Id == id);
             if (carritoItem == null)
             {
                 return NotFound();
@@ -145,7 +98,7 @@ namespace CarritoCompras.Controllers
             {
                 try
                 {
-                    var carritoItemEncontrado = BuscarCarritoItem(id);
+                    var carritoItemEncontrado = await _context.CarritoItem.FirstOrDefaultAsync(e => e.Id == id);
                     carritoItemEncontrado.ValorUnitario = carritoItem.ValorUnitario;
                     carritoItemEncontrado.Cantidad = carritoItem.Cantidad;
                     carritoItemEncontrado.Subtotal = carritoItem.Subtotal;
@@ -198,10 +151,6 @@ namespace CarritoCompras.Controllers
         private bool CarritoItemExists(Guid id)
         {
             return _context.CarritoItem.Any(e => e.Id == id);
-        }
-        private CarritoItem BuscarCarritoItem(Guid? id)
-        {
-            return CarritoItems.FirstOrDefault(e => e.Id == id);
-        }
+        }        
     }
 }

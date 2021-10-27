@@ -103,7 +103,7 @@ namespace CarritoCompras.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductoExists(producto.Id))
+                    if (!_context.Producto.Any(n => n.Id == id))
                     {
                         return NotFound();
                     }
@@ -146,9 +146,5 @@ namespace CarritoCompras.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductoExists(Guid id)
-        {
-            return _context.Producto.Any(e => e.Id == id);
-        }
     }
 }

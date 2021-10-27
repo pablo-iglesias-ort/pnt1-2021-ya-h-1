@@ -13,27 +13,7 @@ namespace CarritoCompras.Controllers
     public class SucursalController : Controller
     {
         private readonly CarritoComprasContext _context;
-        static List<Sucursal> sucursales = new List<Sucursal>()
-        {
-            new Sucursal()
-            {
-                Id = Guid.NewGuid(),
-                Nombre = "Boedo",
-                Direccion = "Av Boedo 264",
-                Telefono = "5555-5555",
-                Email ="sucursal@mail.com",
-                StockItems = null
-    },
-            new Sucursal()
-            {
-                Id = Guid.NewGuid(),
-                Nombre = "LaPlata",
-                Direccion = "Av La Palta 1356",
-                Telefono = "5555-5555",
-                Email ="sucursal2@mail.com",
-                StockItems = null
-    }
-        };
+       
         public SucursalController(CarritoComprasContext context)
         {
             _context = context;
@@ -42,8 +22,7 @@ namespace CarritoCompras.Controllers
         // GET: Sucursal
         public async Task<IActionResult> Index()
         {
-            //return View(await _context.Sucursal.ToListAsync());
-            return View(sucursales);
+            return View(await _context.Sucursal.ToListAsync());           
         }
 
         // GET: Sucursal/Details/5
@@ -54,7 +33,7 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var sucursal = BuscarSucursal(id);
+            var sucursal = await _context.Sucursal.FirstOrDefaultAsync(n => n.Id == id);
             if (sucursal == null)
             {
                 return NotFound();
@@ -94,7 +73,7 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
 
-            var sucursal = BuscarSucursal(id);
+            var sucursal = await _context.Sucursal.FirstOrDefaultAsync(n => n.Id == id);
             if (sucursal == null)
             {
                 return NotFound();
@@ -118,7 +97,7 @@ namespace CarritoCompras.Controllers
             {
                 try
                 {
-                    var sucursalEncontrada = BuscarSucursal(id);
+                    var sucursalEncontrada = await _context.Sucursal.FirstOrDefaultAsync(n => n.Id == id);
                     sucursalEncontrada.Nombre = sucursal.Nombre;
                     sucursalEncontrada.Direccion = sucursal.Direccion;
                     sucursalEncontrada.Telefono = sucursal.Telefono;
@@ -126,7 +105,7 @@ namespace CarritoCompras.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SucursalExists(sucursal.Id))
+                    if (!_context.Sucursal.Any(n => n.Id == id))
                     {
                         return NotFound();
                     }
@@ -167,17 +146,6 @@ namespace CarritoCompras.Controllers
             _context.Sucursal.Remove(sucursal);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SucursalExists(Guid id)
-        {
-            return _context.Sucursal.Any(e => e.Id == id);
-        }
-
-        private Sucursal BuscarSucursal(Guid? id)
-        {
-            var sucursal = sucursales.FirstOrDefault(m => m.Id == id);
-            return sucursal;
-        }
+        }       
     }
 }

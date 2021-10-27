@@ -13,41 +13,16 @@ namespace CarritoCompras.Controllers
     public class CategoriaController : Controller
     {
         private readonly CarritoComprasContext _context;
-        static List<Categoria> categorias = new List<Categoria>()
-        {
-            new Categoria
-            {
-                Id = Guid.NewGuid(),
-                Nombre = "Libros",
-                Descripcion = "Monografias, textos y libros",
-                Productos = new List<Producto>()
-                {
-                }
-            },
-            new Categoria
-            {
-                Id = Guid.NewGuid(),
-                Nombre = "Juguetes",
-                Descripcion = "Muñecos, cartas y juegos de mesa",
-                Productos = new List<Producto>()
-                {
-                }
-            }
-        };
+        
         public CategoriaController(CarritoComprasContext context)
         {
             _context = context;
         }
-        public void CargarCategorias() {
-            foreach (Categoria c in categorias)
-            {
-                _context.Categoria.Add(c);
-            }
-        }
+
         // GET: Categoria
         public async Task<IActionResult> Index()
         {
-            return View(categorias);
+            return View(await _context.Categoria.ToListAsync());
         }
 
         // GET: Categoria/Details/5
