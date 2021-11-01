@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,21 +8,24 @@ namespace CarritoCompras.Models
 {
     public class Compra
     {
-        public Guid Id { get; set; }
+        private const string completarObligatorio = "Falta completar {0} , Obligatorio";
+        public Guid CompraId { get; set; }
+
+        [Required(ErrorMessage = completarObligatorio)]
+        public Guid ClienteId { get; set; }
         public Cliente Cliente { get; set; }
+
+        [Required(ErrorMessage = completarObligatorio)]
+        public Guid CarritoId { get; set; }
         public Carrito Carrito { get; set; }
-        public double Total { get; set; }
-        /*public Usuario Usuario { get; set; }
-        public string MetodoDePago { get; set; }
-        public List<CarritoItem> ProductosAdquiridos { get; set; }
-        public DateTime TimeStamp { get; set; } //Fecha y Hora
-        public double DescuentoAplicado { get; set; }
-        public DateTime FechaEntregaEstimada { get; set; }
-        */
 
-        public Compra()
-        {
+        [Required(ErrorMessage = completarObligatorio)]
+        
+        public Double Total { get; set; }
 
-        }
+        public DateTime Fecha { get; set; }
+
+        public Guid SucursalId { get; set; }
+        public Sucursal Sucursal { get; set; }
     }
 }

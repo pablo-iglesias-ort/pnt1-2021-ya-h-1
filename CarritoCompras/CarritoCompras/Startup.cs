@@ -9,6 +9,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CarritoCompras.Data;
+using CarritoCompras.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace CarritoCompras
 {
@@ -29,7 +32,22 @@ namespace CarritoCompras
             services.AddDbContext<CarritoComprasContext>(options =>
                     options.UseSqlite("filename=BaseDeDatos.db"));
 
-            //UseSqlServer(Configuration.GetConnectionString("CarritoComprasContext")));
+           
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                opciones =>
+                {
+                    opciones.LoginPath = "/Usuario/Ingresar";
+                    opciones.AccessDeniedPath = "/Usuario/AccesoDenegado";
+                    opciones.LogoutPath = "/Usuario/Salir";
+                    opciones.ReturnUrlParameter = "/Empleado/Details";
+                    //opciones.ReturnUrlParameter = "/Home/Index"; FALTA AGREGAR ENRUTAMIENTO A BOTON SALIR 
+                }
+            );
+
+
+            services.AddControllersWithViews();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +65,9 @@ namespace CarritoCompras
 
             app.UseRouting();
 
+            app.UseAuthentication(); //si esta linea no se pone, nunca valida que esta logeado
+
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -55,6 +76,8 @@ namespace CarritoCompras
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseCookiePolicy();
+
         }
     }
 }

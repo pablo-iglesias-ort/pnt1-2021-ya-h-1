@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CarritoCompras.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarritoCompras.Data
 {
@@ -14,6 +15,7 @@ namespace CarritoCompras.Data
         {
         }
 
+        
         public DbSet<CarritoCompras.Models.Producto> Producto { get; set; }
 
         public DbSet<CarritoCompras.Models.Carrito> Carrito { get; set; }
@@ -24,11 +26,9 @@ namespace CarritoCompras.Data
 
         public DbSet<CarritoCompras.Models.CarritoItem> CarritoItem { get; set; }
 
-	    public DbSet<CarritoCompras.Models.Usuario> Usuario { get; set; }
+        public DbSet<CarritoCompras.Models.Usuario> Usuario { get; set; }
 
-	    public DbSet<CarritoCompras.Models.Empleado> Empleado { get; set; }
-
-	    public DbSet<CarritoCompras.Models.Cliente> Cliente { get; set; }
+        public DbSet<CarritoCompras.Models.Cliente> Cliente { get; set; }
 
         public DbSet<CarritoCompras.Models.Categoria> Categoria { get; set; }
 
