@@ -188,7 +188,6 @@ De la misma manera Uds. deben definir los tipos de datos asociados a cada una de
 - El cliente, una vez que está satisfecho con su carrito, puede finalizar la compra y elejirá un lugar para retirar.
 - El cliente puede vaciar el carrito.
 - Puede actualizar datos de contacto, direccion, telefono. Pero no puede modificar su Email, DNI, Nombre, Apellido, etc.
-- El cliente puede ver el historial de sus compras. Id,Fecha,Sucursal,Monto
 
 **Empleado**
 - El empleado, puede listar las compras realizadas en el mes, en modo listado, ordenado de forma descendente por valor de compra.
@@ -198,18 +197,15 @@ De la misma manera Uds. deben definir los tipos de datos asociados a cada una de
 
 **Producto y Categoria**
 - No pueden eliminarse del sistema. 
-- Solo los producto pueden deshabilitarse.
+- Solo los productos pueden deshabilitarse.
 
 **Sucursal**
 - Cada sucursal, tendrá su propio stock.
 - Y sus datos de locación y contacto.
-- Por el mercado tan volatil, las sucursales, pueden crearse y eliminarse en todo momento.
--- Para poder eliminar una sucursal, la misma no tiene que tener productos en su stock.
 
 **StockItem**
-- Pueden crearse, pero nunca pueden eliminarse desde el sistema. Son dependeintes de la surcursal.
+- Pueden crearse, pero nunca pueden eliminarse desde el sistema. Son dependientes de la surcursal.
 - Puede modificarse la cantidad en todo momento que se dispone de dicho producto, en el stock.
-- Se eliminaran, junto con la sucrusal, si esta fuese eliminada.
 
 **Carrito**
 - El carrito se crea automaticamente con la creación de un cliente, en estado activo.
@@ -229,10 +225,8 @@ De la misma manera Uds. deben definir los tipos de datos asociados a cada una de
 - Al generarse la compra, el carrito que tiene asociado, pasa a estar en estado Inactivo.
 - Al finalizar la compra, se validará si hay disponibles en el stock de la locación que seleccionó el cliente. 
 -- Si hay stock, disminuye el mismo, y crea la compra.
--- Si no hay stock, verifica en otras locaciones, si hay stock. 
---- Si hay en alguna, propone las locaciones o indica que no hay en stock.
---- Si seleccionó una nueva locación, finaliza la compra.
-- Al Finalizar la compra, se le muestra le da las gracias al cliente, se le dá el Id de compra y los datos de la Sucursal que eligió.
+-- Si no hay stock, se indica con un mensaje que intente mas tarde. 
+- Al Finalizar la compra, se le muestra un mensaje que le da las gracias al cliente, se le da el Id de compra y los datos de la Sucursal que eligió.
 - No se pueden eliminar las compras.
 
 
