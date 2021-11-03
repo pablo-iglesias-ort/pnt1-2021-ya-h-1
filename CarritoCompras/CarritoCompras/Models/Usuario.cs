@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CarritoCompras.Models
 {
-    public class Usuario
+    public abstract class Usuario
 
 
     {
@@ -15,6 +15,11 @@ namespace CarritoCompras.Models
 
         [Key]
         public Guid Id { get; set; }
+
+
+        [Required(ErrorMessage = completarObligatorio)]
+        [StringLength(120, ErrorMessage = "{0} admite como maximo {1} digitos")]
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = completarObligatorio)]
         [StringLength(120, ErrorMessage = "{0} admite como maximo {1} digitos")]
@@ -35,16 +40,19 @@ namespace CarritoCompras.Models
 
 
         [Required(ErrorMessage = completarObligatorio)]
-        [DataType(DataType.Date)]
-        [Display(Name = "Fecha de alta de usuario")]
+        [DataType(DataType.Date)]        
         public DateTime FechaAlta { get; set; }
 
         [Required(ErrorMessage = completarObligatorio)]
-        [RegularExpression(@"^(?=.*?[A-Z])(?=(.*[a-z]){1,})",
-            ErrorMessage = "La contraseña debe contener Mayusculas minusculas, numeros y entre 8 y 12 caracteres")]
-        [StringLength(12)]
+        //[RegularExpression(@"^(?=.*?[A-Z])(?=(.*[a-z]){1,})",
+        //    ErrorMessage = "La contraseña debe contener Mayusculas minusculas, numeros y entre 8 y 12 caracteres")]
+        //[StringLength(12)]
+        [MaxLength(10, ErrorMessage = "El campo {0} debe contener {1} caracteres")]
         [DataType(DataType.Password)]
-
         public string Password { get; set; }
+
+        [Required]
+        public abstract Rol Rol { get; }
+
     }
 }

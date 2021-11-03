@@ -1,5 +1,7 @@
-﻿using CarritoCompras.Models;
+﻿using CarritoCompras.Data;
+using CarritoCompras.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,19 +13,24 @@ namespace CarritoCompras.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly CarritoComprasContext _context;
+
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, CarritoComprasContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var categorias = _context.Categoria
+                .Include(c => c.Productos);
+            return View(categorias);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Creditos()
         {
             return View();
         }

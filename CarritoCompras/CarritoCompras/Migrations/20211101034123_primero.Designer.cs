@@ -9,50 +9,51 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarritoCompras.Migrations
 {
     [DbContext(typeof(CarritoComprasContext))]
-    [Migration("20211027010718_Base-1.01")]
-    partial class Base101
+    [Migration("20211101034123_primero")]
+    partial class primero
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.15");
+                .HasAnnotation("ProductVersion", "3.1.20");
 
             modelBuilder.Entity("CarritoCompras.Models.Carrito", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CarritoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Activo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ClienteId")
+                    b.Property<Guid>("ClienteId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Subtotal")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                    b.HasKey("CarritoId");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("ClienteId")
+                        .IsUnique();
 
                     b.ToTable("Carrito");
                 });
 
             modelBuilder.Entity("CarritoCompras.Models.CarritoItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CarritoItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("CarritoId")
+                    b.Property<Guid>("CarritoId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ProductoId")
+                    b.Property<Guid>("ProductoId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Subtotal")
@@ -61,7 +62,7 @@ namespace CarritoCompras.Migrations
                     b.Property<double>("ValorUnitario")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                    b.HasKey("CarritoItemId");
 
                     b.HasIndex("CarritoId");
 
@@ -72,7 +73,7 @@ namespace CarritoCompras.Migrations
 
             modelBuilder.Entity("CarritoCompras.Models.Categoria", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CategoriaId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -82,57 +83,73 @@ namespace CarritoCompras.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoriaId");
 
                     b.ToTable("Categoria");
                 });
 
             modelBuilder.Entity("CarritoCompras.Models.Compra", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CompraId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CarritoId")
+                    b.Property<Guid>("CarritoId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ClienteId")
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SucursalId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Total")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                    b.HasKey("CompraId");
 
                     b.HasIndex("CarritoId");
 
                     b.HasIndex("ClienteId");
+
+                    b.HasIndex("SucursalId");
 
                     b.ToTable("Compra");
                 });
 
             modelBuilder.Entity("CarritoCompras.Models.Producto", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ProductoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Activo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("CategoriaId")
+                    b.Property<Guid>("CategoriaId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Foto")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(25);
 
-                    b.Property<double>("PrecioVigente")
+                    b.Property<float>("PrecioVigente")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductoId");
 
                     b.HasIndex("CategoriaId");
 
@@ -141,7 +158,7 @@ namespace CarritoCompras.Migrations
 
             modelBuilder.Entity("CarritoCompras.Models.StockItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("StockItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -154,7 +171,7 @@ namespace CarritoCompras.Migrations
                     b.Property<Guid>("SucursalId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("StockItemId");
 
                     b.HasIndex("ProductoId");
 
@@ -165,25 +182,30 @@ namespace CarritoCompras.Migrations
 
             modelBuilder.Entity("CarritoCompras.Models.Sucursal", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("SucursalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(120);
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(120);
 
                     b.Property<string>("Telefono")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20);
 
-                    b.HasKey("Id");
+                    b.HasKey("SucursalId");
 
                     b.ToTable("Sucursal");
                 });
@@ -194,11 +216,17 @@ namespace CarritoCompras.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
+                    b.Property<string>("Apellido")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(120);
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(120);
+
+                    b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -207,11 +235,23 @@ namespace CarritoCompras.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(120);
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(12);
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(120);
 
                     b.HasKey("Id");
 
@@ -224,7 +264,10 @@ namespace CarritoCompras.Migrations
                 {
                     b.HasBaseType("CarritoCompras.Models.Usuario");
 
-                    b.Property<string>("Dni")
+                    b.Property<Guid?>("CarritoId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DNI")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -235,55 +278,61 @@ namespace CarritoCompras.Migrations
                 {
                     b.HasBaseType("CarritoCompras.Models.Usuario");
 
-                    b.Property<string>("Apellido")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Direccion")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasDiscriminator().HasValue("Empleado");
                 });
 
             modelBuilder.Entity("CarritoCompras.Models.Carrito", b =>
                 {
                     b.HasOne("CarritoCompras.Models.Cliente", "Cliente")
-                        .WithMany("Carritos")
-                        .HasForeignKey("ClienteId");
+                        .WithOne("Carrito")
+                        .HasForeignKey("CarritoCompras.Models.Carrito", "ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarritoCompras.Models.CarritoItem", b =>
                 {
                     b.HasOne("CarritoCompras.Models.Carrito", "Carrito")
                         .WithMany("CarritosItems")
-                        .HasForeignKey("CarritoId");
+                        .HasForeignKey("CarritoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CarritoCompras.Models.Producto", "Producto")
                         .WithMany()
-                        .HasForeignKey("ProductoId");
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarritoCompras.Models.Compra", b =>
                 {
                     b.HasOne("CarritoCompras.Models.Carrito", "Carrito")
                         .WithMany()
-                        .HasForeignKey("CarritoId");
+                        .HasForeignKey("CarritoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CarritoCompras.Models.Cliente", "Cliente")
                         .WithMany("Compras")
-                        .HasForeignKey("ClienteId");
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarritoCompras.Models.Sucursal", "Sucursal")
+                        .WithMany()
+                        .HasForeignKey("SucursalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarritoCompras.Models.Producto", b =>
                 {
                     b.HasOne("CarritoCompras.Models.Categoria", "Categoria")
                         .WithMany("Productos")
-                        .HasForeignKey("CategoriaId");
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarritoCompras.Models.StockItem", b =>

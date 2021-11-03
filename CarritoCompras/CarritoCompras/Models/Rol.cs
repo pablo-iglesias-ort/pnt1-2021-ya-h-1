@@ -10,6 +10,6 @@ namespace CarritoCompras.Models
     {
         Administrador = 1,
         Cliente = 2,
-
     }
+
 }

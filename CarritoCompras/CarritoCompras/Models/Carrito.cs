@@ -20,11 +20,12 @@ namespace CarritoCompras.Models
         public Cliente Cliente { get; set; }
 
         [Required(ErrorMessage = completarObligatorio)]
-        public bool Activo { get; set; }               
+        public bool Activo { get; set; }
 
         public List<CarritoItem> CarritosItems { get; set; }
 
         [Required(ErrorMessage = completarObligatorio)]
         public double Subtotal { get; set; }
+
     }
 }

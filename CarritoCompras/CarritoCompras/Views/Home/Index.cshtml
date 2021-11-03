@@ -1,8 +1,58 @@
-﻿@{
+﻿@model IEnumerable<CarritoCompras.Models.Categoria>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1 class="visually-hidden">Carrito App</h1>
+
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">Carrito App</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Bienvenido a la mejor aplicación de Carrito de Compras de la zona.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a class="btn btn btn-outline-primary btn-lg px-4 gap-3" asp-area="" asp-controller="Usuarios" asp-action="Ingresar">Ingresar</a>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Salir</button>
+        </div>
+    </div>
 </div>
+
+<h1>Productos</h1>
+
+@foreach (var categoria in Model)
+{
+    <h2>@Html.DisplayFor(modelItem => categoria.Nombre)</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Descripción
+                </th>
+                <th>
+                    Precio Vigente
+                </th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in categoria.Productos)
+            {
+                <tr class="">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrecioVigente)
+                    </td>                                  
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+

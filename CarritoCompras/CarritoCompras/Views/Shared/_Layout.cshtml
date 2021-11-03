@@ -22,32 +22,34 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Creditos">Creditos</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Carrito" asp-action="Index">Carrito</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Sucursal" asp-action="Index">Sucursal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index">Usuario</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleado" asp-action="Index">Empleado</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Cliente</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="StockItem" asp-action="Index">StockItem</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categoria" asp-action="Index">Categorias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                                <ul class="navbar-nav flex-grow-1">
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-controller="Categorias" asp-action="Seleccionar">Agregar Productos</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-controller="Carritos" asp-action="Index">Carrito</a>
+                                    </li>
+                                    <li class="nav-item float-right">
+                                        <form asp-controller="Usuarios" asp-action="Salir" method="post">
+                                            <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Salir</button> @*agrego estilo al botón salir*@
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-primary" asp-area="" asp-controller="Usuarios" asp-action="Ingresar">Ingresar</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>

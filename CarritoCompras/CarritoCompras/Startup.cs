@@ -37,11 +37,9 @@ namespace CarritoCompras
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                 opciones =>
                 {
-                    opciones.LoginPath = "/Usuario/Ingresar";
-                    opciones.AccessDeniedPath = "/Usuario/AccesoDenegado";
-                    opciones.LogoutPath = "/Usuario/Salir";
-                    opciones.ReturnUrlParameter = "/Empleado/Details";
-                    //opciones.ReturnUrlParameter = "/Home/Index"; FALTA AGREGAR ENRUTAMIENTO A BOTON SALIR 
+                    opciones.LoginPath = "/Usuarios/Ingresar";
+                    opciones.AccessDeniedPath = "/Usuarios/AccesoDenegado";
+                    opciones.LogoutPath = "/Usuarios/Salir";                    
                 }
             );
 
@@ -66,7 +64,6 @@ namespace CarritoCompras
             app.UseRouting();
 
             app.UseAuthentication(); //si esta linea no se pone, nunca valida que esta logeado
-
 
             app.UseAuthorization();
 

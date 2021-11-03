@@ -18,6 +18,8 @@ namespace CarritoCompras.Data
         
         public DbSet<CarritoCompras.Models.Producto> Producto { get; set; }
 
+        public DbSet<CarritoCompras.Models.Empleado> Empleado { get; set; }
+
         public DbSet<CarritoCompras.Models.Carrito> Carrito { get; set; }
 
         public DbSet<CarritoCompras.Models.Sucursal> Sucursal { get; set; }
@@ -32,6 +34,7 @@ namespace CarritoCompras.Data
 
         public DbSet<CarritoCompras.Models.Categoria> Categoria { get; set; }
 
+        public DbSet<CarritoCompras.Models.Compra> Compra { get; set; }
 
     }
 }
