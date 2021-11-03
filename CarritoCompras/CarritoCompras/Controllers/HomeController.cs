@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace CarritoCompras.Controllers
 {
@@ -23,6 +25,7 @@ namespace CarritoCompras.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var categorias = _context.Categoria
@@ -30,6 +33,7 @@ namespace CarritoCompras.Controllers
             return View(categorias);
         }
 
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public IActionResult Creditos()
         {
             return View();

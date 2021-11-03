@@ -191,6 +191,8 @@ namespace CarritoCompras.Controllers
                         identidad.AddClaim(new Claim(ClaimTypes.Role, user.Rol.ToString()));
                         // Agregamos el Id de Usuario
                         identidad.AddClaim(new Claim("IdDeUsuario", user.Id.ToString()));
+                        identidad.AddClaim(new Claim("zaraza", user.Nombre.ToString()));
+
 
                         ClaimsPrincipal principal = new ClaimsPrincipal(identidad);
 

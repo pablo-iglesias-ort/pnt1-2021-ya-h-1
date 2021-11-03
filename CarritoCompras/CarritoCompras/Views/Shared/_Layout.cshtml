@@ -36,6 +36,9 @@
                                         <a class="nav-link" asp-area="" asp-controller="Carritos" asp-action="Index">Carrito</a>
                                     </li>
                                     <li class="nav-item float-right">
+                                        <a class="nav-link text-success" asp-area="" asp-controller="Empleado" asp-action="Details" asp-route-id=@User.FindFirst("zaraza")>@User.FindFirst("zaraza").Value</a>
+                                    </li>
+                                    <li class="nav-item float-right">
                                         <form asp-controller="Usuarios" asp-action="Salir" method="post">
                                             <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Salir</button> @*agrego estilo al botón salir*@
                                         </form>
