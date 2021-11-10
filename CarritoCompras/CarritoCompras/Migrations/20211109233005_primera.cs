@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarritoCompras.Migrations
 {
-    public partial class primero : Migration
+    public partial class primera : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,10 +46,9 @@ namespace CarritoCompras.Migrations
                     Telefono = table.Column<string>(maxLength: 20, nullable: false),
                     Direccion = table.Column<string>(maxLength: 120, nullable: false),
                     FechaAlta = table.Column<DateTime>(nullable: false),
-                    Password = table.Column<string>(maxLength: 12, nullable: false),
+                    Password = table.Column<string>(maxLength: 10, nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
-                    DNI = table.Column<string>(nullable: true),
-                    CarritoId = table.Column<Guid>(nullable: true)
+                    DNI = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -133,8 +132,7 @@ namespace CarritoCompras.Migrations
                     CarritoId = table.Column<Guid>(nullable: false),
                     ProductoId = table.Column<Guid>(nullable: false),
                     ValorUnitario = table.Column<double>(nullable: false),
-                    Cantidad = table.Column<int>(nullable: false),
-                    Subtotal = table.Column<double>(nullable: false)
+                    Cantidad = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,8 +188,7 @@ namespace CarritoCompras.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Carrito_ClienteId",
                 table: "Carrito",
-                column: "ClienteId",
-                unique: true);
+                column: "ClienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarritoItem_CarritoId",

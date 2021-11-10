@@ -4,7 +4,7 @@
     ViewData["Title"] = "Agregar al Carrito";
 }
 
-<h1>Edit</h1>
+<h1>Agregar</h1>
 
 <h4>Producto</h4>
 <hr />
@@ -27,10 +27,11 @@
                 <label asp-for="PrecioVigente" class="control-label"></label>
                 <input disabled asp-for="PrecioVigente" class="form-control" />
                 <span asp-validation-for="PrecioVigente" class="text-danger"></span>
-            </div>
+            </div>            
             <div class="form-group">
+                <div class="text-danger">@ViewBag.ErrorEnLogin</div>
                 <label name="Cantidad" class="control-label"></label>
-                <input type="number" name="Cantidad" class="form-control" />                
+                <input type="number" name="Cantidad" class="form-control" />
             </div>           
             <div class="form-group">
                 <input type="submit" value="Agregar" class="btn btn-primary" />

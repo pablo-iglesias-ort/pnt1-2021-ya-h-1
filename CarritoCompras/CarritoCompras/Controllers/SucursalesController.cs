@@ -25,6 +25,17 @@ namespace CarritoCompras.Controllers
             return View(await _context.Sucursal.ToListAsync());
         }
 
+        // GET: Sucursales para hacer una COMPRA
+        public async Task<IActionResult> SucursalCompra(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewBag.CarritoId = id;
+            return View(await _context.Sucursal.ToListAsync());
+        }
+
         // GET: Sucursales/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {

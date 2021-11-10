@@ -33,8 +33,7 @@ namespace CarritoCompras.Migrations
 
                     b.HasKey("CarritoId");
 
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Carrito");
                 });
@@ -53,9 +52,6 @@ namespace CarritoCompras.Migrations
 
                     b.Property<Guid>("ProductoId")
                         .HasColumnType("TEXT");
-
-                    b.Property<double>("Subtotal")
-                        .HasColumnType("REAL");
 
                     b.Property<double>("ValorUnitario")
                         .HasColumnType("REAL");
@@ -239,7 +235,7 @@ namespace CarritoCompras.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT")
-                        .HasMaxLength(12);
+                        .HasMaxLength(10);
 
                     b.Property<string>("Telefono")
                         .IsRequired()
@@ -262,9 +258,6 @@ namespace CarritoCompras.Migrations
                 {
                     b.HasBaseType("CarritoCompras.Models.Usuario");
 
-                    b.Property<Guid?>("CarritoId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("DNI")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -282,8 +275,8 @@ namespace CarritoCompras.Migrations
             modelBuilder.Entity("CarritoCompras.Models.Carrito", b =>
                 {
                     b.HasOne("CarritoCompras.Models.Cliente", "Cliente")
-                        .WithOne("Carrito")
-                        .HasForeignKey("CarritoCompras.Models.Carrito", "ClienteId")
+                        .WithMany("Carritos")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

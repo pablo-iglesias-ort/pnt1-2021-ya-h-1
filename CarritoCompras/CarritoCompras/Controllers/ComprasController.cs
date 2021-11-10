@@ -36,6 +36,8 @@ namespace CarritoCompras.Controllers
 
             var compra = await _context.Compra
                 .Include(c => c.Carrito)
+                    .ThenInclude(ci => ci.CarritosItems)
+                        .ThenInclude(p => p.Producto)
                 .Include(c => c.Cliente)
                 .Include(c => c.Sucursal)
                 .FirstOrDefaultAsync(m => m.CompraId == id);
@@ -75,6 +77,58 @@ namespace CarritoCompras.Controllers
             ViewData["SucursalId"] = new SelectList(_context.Sucursal, "SucursalId", "Direccion", compra.SucursalId);
             return View(compra);
         }
+
+        // GET: GENERAR UNA COMPRA NUEVA A PARTIR DE UN CARRITO Y UNA SUCURSAL    
+        public async Task<IActionResult> Comprar(Guid sucursalid, Guid carritoid)
+        {
+        /*if (1==1)
+        {*/
+            var compra = new Compra();
+            compra.CompraId = Guid.NewGuid();
+            compra.CarritoId = carritoid;
+            compra.SucursalId = sucursalid;
+            compra.Fecha = DateTime.Now;
+                
+            var carrito = await _context.Carrito
+            .Include(c => c.CarritosItems)
+                .ThenInclude(ci => ci.Producto)
+            .FirstOrDefaultAsync(m => m.CarritoId == carritoid);
+                
+            double tot = 0.00;
+            foreach(CarritoItem i in carrito.CarritosItems)
+            {
+                tot += (i.Cantidad* i.Producto.PrecioVigente);
+            }
+            compra.Total = tot;
+            compra.ClienteId = carrito.ClienteId;
+            _context.Compra.Add(compra);
+
+                
+            
+            carrito.Activo = false;
+            _context.Carrito.Update(carrito);
+
+
+            var carritoNuevo = new Carrito();
+            carritoNuevo.CarritoId = Guid.NewGuid();
+            carritoNuevo.ClienteId = carrito.ClienteId;
+            carritoNuevo.Activo = true;
+            carritoNuevo.Subtotal = 0;
+
+            _context.Carrito.Add(carritoNuevo);
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details","Compras", new { id = compra.CompraId });
+            /*}
+            ViewData["CarritoId"] = new SelectList(_context.Carrito, "CarritoId", "CarritoId", compra.CarritoId);
+            ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Apellido", compra.ClienteId);
+            ViewData["SucursalId"] = new SelectList(_context.Sucursal, "SucursalId", "Direccion", compra.SucursalId);
+            return View(compra);*/
+        }
+
+
+
+
 
         // GET: Compras/Edit/5
         public async Task<IActionResult> Edit(Guid? id)

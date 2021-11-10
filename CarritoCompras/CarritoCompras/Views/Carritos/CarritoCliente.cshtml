@@ -1,0 +1,56 @@
+﻿@model CarritoCompras.Models.Carrito
+
+@{
+    ViewData["Title"] = "Carrito";
+}
+
+<h1>Carrito</h1>
+<p>
+    <a asp-action="Seleccionar" asp-controller="Categorias">Agregar Productos</a>
+</p>
+<p>
+    <a asp-action="Vaciar" asp-controller="Carritos" asp-route-id="@Model.CarritoId">Vaciar Carrito</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Producto
+            </th>
+            <th>
+                Cantidad
+            </th>
+            <th>
+                Precio Unitario
+            </th>
+            <th>
+                Subtotal
+            </th>
+            <th>Operaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CarritosItems)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Producto.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Producto.PrecioVigente)
+            </td>
+            <td>
+                @{var x = item.Cantidad * item.Producto.PrecioVigente; }
+                @x.ToString()
+            </td>
+            <td>
+                <a asp-action="EditarItem" asp-route-id="@item.CarritoItemId">Editar</a> | <a asp-action="RemoveItem" asp-route-id="@item.CarritoItemId">Borrar</a> 
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="SucursalCompra" asp-controller="Sucursales" asp-route-id="@Model.CarritoId" class="btn-primary">Comprar</a>

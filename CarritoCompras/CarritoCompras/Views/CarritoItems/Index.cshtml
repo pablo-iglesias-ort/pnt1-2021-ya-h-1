@@ -19,13 +19,7 @@
                 @Html.DisplayNameFor(model => model.Producto)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ValorUnitario)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Cantidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Subtotal)
             </th>
             <th></th>
         </tr>
@@ -40,13 +34,7 @@
                 @Html.DisplayFor(modelItem => item.Producto.Descripcion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ValorUnitario)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Cantidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subtotal)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.CarritoItemId">Edit</a> |

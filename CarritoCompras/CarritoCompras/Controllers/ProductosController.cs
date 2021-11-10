@@ -107,6 +107,10 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
             ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId", producto.CategoriaId);
+            if(TempData["error"] != null)
+            {
+                ViewBag.ErrorEnLogin = TempData["error"];
+            }
             return View(producto);
         }
 
