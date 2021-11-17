@@ -1,0 +1,48 @@
+﻿@model IEnumerable<CarritoCompras.Models.Sucursal>
+
+@{
+    ViewData["Title"] = "Seleccione Sucursal";
+}
+
+<h1>Seleccione sucursal</h1>
+<div class="text-danger">@ViewBag.Error</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                <a asp-action="Comprar" asp-controller="Compras" asp-route-carritoid="@ViewBag.CarritoId" asp-route-sucursalid="@item.SucursalId">Seleccionar</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
