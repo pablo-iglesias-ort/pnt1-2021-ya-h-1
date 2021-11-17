@@ -23,27 +23,32 @@
             @{var name = Model.Cliente.Apellido + " " + Model.Cliente.Nombre + " - " + Model.Cliente.DNI; }
             @name
         </dd>
-        <tbody>
-            @foreach (var item in Model.Carrito.CarritosItems)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Producto.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Cantidad)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Producto.PrecioVigente)
-                    </td>
-                    <td>
-                        @{var x = item.Cantidad * item.Producto.PrecioVigente; }
-                        @x.ToString()
-                    </td>
 
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Total</th>
                 </tr>
-            }
-        </tbody>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Carrito.CarritosItems)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Producto.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Cantidad)</td>
+                        <td> @Html.DisplayFor(modelItem => item.Producto.PrecioVigente)</td>
+                        <td>
+                            @{var x = item.Cantidad * item.Producto.PrecioVigente; }
+                            @x.ToString()
+                        </td>
+                    </tr>
+                }
+             </tbody>
+        </table>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Total)
         </dt>

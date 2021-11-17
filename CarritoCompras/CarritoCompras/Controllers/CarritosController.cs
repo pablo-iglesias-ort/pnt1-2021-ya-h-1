@@ -214,10 +214,12 @@ namespace CarritoCompras.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                var carrito = await _context.Carrito
+                    .FirstOrDefaultAsync(m => m.CarritoId == carritoItem.CarritoId);
+                return RedirectToAction(nameof(CarritoCliente), new { id = carrito.ClienteId });
             }
 
-            return RedirectToAction("CarritoCliente", "Carritos", new { id = carritoItem.Carrito.ClienteId });
+            return View(id);
         }
 
         // GET: Carritos/Delete/5

@@ -115,27 +115,27 @@ namespace CarritoCompras.Data
 					context.Producto.Add(nuevoProducto2);					
 
 					context.SaveChanges();
+					
 					var carrito = new Carrito();
 					carrito.ClienteId = nuevoCliente.Id;
-					carrito.CarritoId = Guid.NewGuid();
-					carrito.CarritosItems = new List<CarritoItem>();
+					carrito.CarritoId = Guid.NewGuid();					
 					carrito.Activo = true;
 					carrito.Subtotal = 0.00;
 					context.Carrito.Add(carrito);
 
 					context.SaveChanges();
-
+				
+					
 					var carrito1 = new Carrito();
 					carrito1.ClienteId = nuevoCliente1.Id;
-					carrito1.CarritoId = Guid.NewGuid();
-					carrito1.CarritosItems = new List<CarritoItem>();
+					carrito1.CarritoId = Guid.NewGuid();					
 					carrito1.Activo = true;
 					carrito1.Subtotal = 0.00;
 					context.Carrito.Add(carrito1);
 
 					context.SaveChanges();
 
-
+					
 					var carritoItem1 = new CarritoItem();
 					carritoItem1.CarritoItemId = Guid.NewGuid();
 					carritoItem1.CarritoId = carrito.CarritoId;
@@ -144,32 +144,67 @@ namespace CarritoCompras.Data
 					context.CarritoItem.Add(carritoItem1);
 
 					context.SaveChanges();
-
+					
+					
 					var carritoItem2 = new CarritoItem();
-					carritoItem2.CarritoId = carrito.CarritoId;
 					carritoItem2.CarritoItemId = Guid.NewGuid();
+					carritoItem2.CarritoId = carrito.CarritoId;
 					carritoItem2.ProductoId = nuevoProducto1.ProductoId;
 					carritoItem2.Cantidad = 10;
 					context.CarritoItem.Add(carritoItem2);
 					context.SaveChanges();
+
+					
 					var carritoItem3 = new CarritoItem();
 					carritoItem3.CarritoItemId = Guid.NewGuid();
-
 					carritoItem3.CarritoId = carrito.CarritoId;
 					carritoItem3.ProductoId = nuevoProducto2.ProductoId;
 					carritoItem3.Cantidad = 200;
 					context.CarritoItem.Add(carritoItem3);
 					context.SaveChanges();
 
-					
-					carrito.CarritosItems.Add(carritoItem1);
+					var suc1 = new Sucursal();
+					suc1.SucursalId = Guid.NewGuid();
+					suc1.Nombre = "Fravega";
+					suc1.Direccion = "Corrientes Av. 3444";
+					suc1.Telefono = "12345678";
+					suc1.Email = "Fraveg@Gmail.com";
+					context.Sucursal.Add(suc1);
 					context.SaveChanges();
-					carrito.CarritosItems.Add(carritoItem2);
+					var suc2 = new Sucursal();
+					suc2.SucursalId = Guid.NewGuid();
+					suc2.Nombre = "Musimundo";
+					suc2.Direccion = "Santa Fe Av. 8882";
+					suc2.Telefono = "98765432";
+					suc2.Email = "Musimundo@Gmail.com";
+					context.Sucursal.Add(suc2);
 					context.SaveChanges();
-					carrito.CarritosItems.Add(carritoItem3);
 
+					var stkit1 = new StockItem();
+					stkit1.StockItemId = Guid.NewGuid();
+					stkit1.SucursalId = suc1.SucursalId;
+					stkit1.ProductoId = nuevoProducto.ProductoId;
+					stkit1.Cantidad = 100;
+					context.StockItem.Add(stkit1);
+					var stkit1a = new StockItem();
+					stkit1a.StockItemId = Guid.NewGuid();
+					stkit1a.SucursalId = suc1.SucursalId;
+					stkit1a.ProductoId = nuevoProducto1.ProductoId;
+					stkit1a.Cantidad = 100;
+					context.StockItem.Add(stkit1a);
+					var stkit1b = new StockItem();
+					stkit1b.StockItemId = Guid.NewGuid();
+					stkit1b.SucursalId = suc1.SucursalId;
+					stkit1b.ProductoId = nuevoProducto2.ProductoId;
+					stkit1b.Cantidad = 100;
+					context.StockItem.Add(stkit1b);
 					context.SaveChanges();
-				
+					suc1.StockItems.Add(stkit1);
+					suc1.StockItems.Add(stkit1a);
+					suc1.StockItems.Add(stkit1b);
+					context.Sucursal.Update(suc1);
+					context.SaveChanges();
+
 					transaccion.Commit();
 				}
 				catch(Exception Ex)
