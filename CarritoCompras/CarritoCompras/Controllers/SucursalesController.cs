@@ -33,6 +33,10 @@ namespace CarritoCompras.Controllers
                 return NotFound();
             }
             ViewBag.CarritoId = id;
+             if(TempData["error"] != null)
+            {
+                ViewBag.Error = TempData["error"];
+            }
             return View(await _context.Sucursal.ToListAsync());
         }
 

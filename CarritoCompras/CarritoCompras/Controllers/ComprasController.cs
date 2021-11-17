@@ -95,42 +95,68 @@ namespace CarritoCompras.Controllers
         {
         /*if (1==1)
         {*/
-            var compra = new Compra();
-            compra.CompraId = Guid.NewGuid();
-            compra.CarritoId = carritoid;
-            compra.SucursalId = sucursalid;
-            compra.Fecha = DateTime.Now;
-                
-            var carrito = await _context.Carrito
-            .Include(c => c.CarritosItems)
-                .ThenInclude(ci => ci.Producto)
-            .FirstOrDefaultAsync(m => m.CarritoId == carritoid);
-                
-            double tot = 0.00;
-            foreach(CarritoItem i in carrito.CarritosItems)
-            {
-                tot += (i.Cantidad* i.Producto.PrecioVigente);
+            var suc = await _context.Sucursal
+                .Include(cr => cr.Carrito)
+                    .ThenInclude(c => c.CarritosItems)
+                        .ThenInclude(ci => ci.Producto)
+                .FirstOrDefaultAsync(m => m.CarritoId == carritoid);
+             var carrito = await _context.Carrito
+                .Include(c => c.CarritosItems)
+                    .ThenInclude(ci => ci.Producto)
+                .FirstOrDefaultAsync(m => m.CarritoId == carritoid);
+            List<CarritoItem> rej = new List<CarritoItem>();
+            var str = "";
+            foreach(CarritosItems i in carrito.CarritosItems){
+                var it = await suc.StockItems.Find(i.ProductoId);
+                if(it.Cantidad >= i.Cantidad){
+                    it.Cantidad = it.Cantidad -i.Cantidad;
+                }else{
+                    str = (String.IsNullOrEmpty(str) ? i.Producto.Nombre : str +", "+ i.Producto.Nombre);
+                    rej.Add(i);
+                }
             }
-            compra.Total = tot;
-            compra.ClienteId = carrito.ClienteId;
-            _context.Compra.Add(compra);
+            if(rej.Count() >= 1){
+                 TempData["error"] = "En la sucursal "+suc.Nombre +" no hay stock suficiente de los siguientes productos: "+str+".";
+                return RedirectToAction("SucursalCompra","Sucursal", new { id = compra.carritoid });
+            }else{
 
-                
+                 _context.Sucursal.Update(suc);
+
+                var compra = new Compra();
+                compra.CompraId = Guid.NewGuid();
+                compra.CarritoId = carritoid;
+                compra.SucursalId = sucursalid;
+                compra.Fecha = DateTime.Now;
+                    
             
-            carrito.Activo = false;
-            _context.Carrito.Update(carrito);
+                    
+                double tot = 0.00;
+                foreach(CarritoItem i in carrito.CarritosItems)
+                {
+                    tot += (i.Cantidad* i.Producto.PrecioVigente);
+                }
+                compra.Total = tot;
+                compra.ClienteId = carrito.ClienteId;
+                _context.Compra.Add(compra);
+
+                    
+                
+                carrito.Activo = false;
+                _context.Carrito.Update(carrito);
 
 
-            var carritoNuevo = new Carrito();
-            carritoNuevo.CarritoId = Guid.NewGuid();
-            carritoNuevo.ClienteId = carrito.ClienteId;
-            carritoNuevo.Activo = true;
-            carritoNuevo.Subtotal = 0;
+                var carritoNuevo = new Carrito();
+                carritoNuevo.CarritoId = Guid.NewGuid();
+                carritoNuevo.ClienteId = carrito.ClienteId;
+                carritoNuevo.Activo = true;
+                carritoNuevo.Subtotal = 0;
 
-            _context.Carrito.Add(carritoNuevo);
+                _context.Carrito.Add(carritoNuevo);
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details","Compras", new { id = compra.CompraId });
+            }
+            
             /*}
             ViewData["CarritoId"] = new SelectList(_context.Carrito, "CarritoId", "CarritoId", compra.CarritoId);
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Apellido", compra.ClienteId);
