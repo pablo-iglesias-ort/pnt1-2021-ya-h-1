@@ -26,6 +26,18 @@ namespace CarritoCompras.Controllers
             return View(await carritoComprasContext.ToListAsync());
         }
 
+        // GET: Compras del Cliente
+        public async Task<IActionResult> ComprasCliente(Guid id)
+        {
+            var cliente = _context.Cliente.FirstOrDefault(n => n.Id == id);
+            ViewData["nombre"] = cliente.Nombre + cliente.Apellido;
+            var carritoComprasContext = _context.Compra.Include(c => c.Carrito).Include(c => c.Cliente).Include(c => c.Sucursal).Where(n => n.ClienteId == id);
+            return View(await carritoComprasContext.ToListAsync());
+        }
+
+
+        
+
         // GET: Compras/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {

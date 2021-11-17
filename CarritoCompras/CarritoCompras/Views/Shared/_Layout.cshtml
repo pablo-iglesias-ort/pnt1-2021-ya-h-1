@@ -36,7 +36,7 @@
                                         <a class="nav-link" asp-area="" asp-controller="Carritos" asp-action="CarritoCliente" asp-route-id=@User.FindFirst("IdDeUsuario").Value>Carrito</a>
                                     </li>
                                     <li class="nav-item float-right">
-                                        <a class="nav-link text-success" asp-area="" asp-controller="Empleado" asp-action="Details" asp-route-id=@User.FindFirst("zaraza")>@User.FindFirst("zaraza").Value</a>
+                                        <a class="nav-link text-success" asp-area="" asp-controller="Clientes" asp-action="Details" asp-route-id=@User.FindFirst("IdDeUsuario").Value>@User.FindFirst("zaraza").Value</a>
                                     </li>                                   
                                     <li class="nav-item float-right">
                                         <form asp-controller="Usuarios" asp-action="Salir" method="post">
