@@ -96,19 +96,18 @@ namespace CarritoCompras.Controllers
         /*if (1==1)
         {*/
             var suc = await _context.Sucursal
-                .Include(cr => cr.Carrito)
-                    .ThenInclude(c => c.CarritosItems)
+                    .Include(c => c.StockItems)
                         .ThenInclude(ci => ci.Producto)
-                .FirstOrDefaultAsync(m => m.CarritoId == carritoid);
+                .FirstOrDefaultAsync(m => m.SucursalId == sucursalid);
              var carrito = await _context.Carrito
                 .Include(c => c.CarritosItems)
                     .ThenInclude(ci => ci.Producto)
                 .FirstOrDefaultAsync(m => m.CarritoId == carritoid);
             List<CarritoItem> rej = new List<CarritoItem>();
             var str = "";
-            foreach(CarritosItems i in carrito.CarritosItems){
-                var it = await suc.StockItems.Find(i.ProductoId);
-                if(it.Cantidad >= i.Cantidad){
+            foreach(CarritoItem i in carrito.CarritosItems){
+                var it = suc.StockItems.Find(z => z.ProductoId == i.ProductoId);
+                if(it !=null && it.Cantidad >= i.Cantidad){
                     it.Cantidad = it.Cantidad -i.Cantidad;
                 }else{
                     str = (String.IsNullOrEmpty(str) ? i.Producto.Nombre : str +", "+ i.Producto.Nombre);
@@ -117,7 +116,7 @@ namespace CarritoCompras.Controllers
             }
             if(rej.Count() >= 1){
                  TempData["error"] = "En la sucursal "+suc.Nombre +" no hay stock suficiente de los siguientes productos: "+str+".";
-                return RedirectToAction("SucursalCompra","Sucursal", new { id = compra.carritoid });
+                return RedirectToAction("SucursalCompra","Sucursales", new { id = carrito.CarritoId });
             }else{
 
                  _context.Sucursal.Update(suc);
