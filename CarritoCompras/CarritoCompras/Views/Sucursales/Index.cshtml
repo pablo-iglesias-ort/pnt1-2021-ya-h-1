@@ -43,9 +43,14 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.SucursalId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SucursalId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SucursalId">Delete</a>
+                @if (User.IsInRole(nameof(Rol.Administrador)))
+                {
+                    var pip = "|"; 
+                    <a asp-action="Edit" asp-route-id="@item.SucursalId">Edit</a> @pip
+                    <a asp-action="Details" asp-route-id="@item.SucursalId">Details</a> @pip
+                    <a asp-action="AgregarProductos" asp-route-id="@item.SucursalId">Agregar Stock</a> @pip
+                    <a asp-action="Delete" asp-route-id="@item.SucursalId">Delete</a>
+                }
             </td>
         </tr>
 }

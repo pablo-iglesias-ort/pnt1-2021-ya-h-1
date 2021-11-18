@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<CarritoCompras.Models.Producto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Productos";
 }
 
-<h1>Index</h1>
+<h1>Productos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Nuevo Producto</a>
 </p>
 <table class="table">
     <thead>
@@ -55,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.Foto)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductoId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ProductoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.ProductoId">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductoId">Borrar</a>
             </td>
         </tr>
 }

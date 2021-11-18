@@ -87,7 +87,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("DNI,CarritoId,Id,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password")] Cliente cliente)
+        public async Task<IActionResult> Edit(Guid id, [Bind("DNI,CarritoId,Id,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password,UserName")] Cliente cliente)
         {
             if (id != cliente.Id)
             {
@@ -112,7 +112,7 @@ namespace CarritoCompras.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Clientes", new { id = cliente.Id});
             }
             return View(cliente);
         }

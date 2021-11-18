@@ -54,7 +54,7 @@ namespace CarritoCompras.Controllers
         // GET: Productos/Create
         public IActionResult Create()
         {
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId");
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Nombre").OrderBy(n => n.Text);
             return View();
         }
 
@@ -72,7 +72,7 @@ namespace CarritoCompras.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId", producto.CategoriaId);
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Nombre").OrderBy(n => n.Text);
             return View(producto);
         }
 
@@ -89,7 +89,7 @@ namespace CarritoCompras.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId", producto.CategoriaId);
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Nombre").OrderBy(n => n.Text);
             return View(producto);
         }
 
@@ -106,8 +106,8 @@ namespace CarritoCompras.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId", producto.CategoriaId);
-            if(TempData["error"] != null)
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Nombre").OrderBy(n => n.Text);
+            if (TempData["error"] != null)
             {
                 ViewBag.ErrorEnLogin = TempData["error"];
             }
@@ -147,7 +147,7 @@ namespace CarritoCompras.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId", producto.CategoriaId);
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Nombre").OrderBy(n => n.Text);
             return View(producto);
         }
 

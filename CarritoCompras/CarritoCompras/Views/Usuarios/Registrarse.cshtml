@@ -47,18 +47,6 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-
-            @if (User.IsInRole(nameof(Rol.Administrador)))
-            {
-                <div class="form-group">
-                    <label for="Legajo" class="control-label">Legajo</label>
-                    <input type="number" name="Legajo" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <input type="hidden" name="AltaEmpleado" value="true" />
-                </div>
-            }
-
             <div class="form-group">
                 <input type="submit" value="Registrarse" class="btn btn-success font-weight-bold text-dark" />
                 <a class="btn btn-danger font-weight-bold text-dark" asp-action="Ingresar">Volver</a>

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<CarritoCompras.Models.Categoria>
+@{
+ViewData["Title"] = "Agregar Stock";
+    List<StockItem> stk = ViewData["Stock"] as List<StockItem>;
+}
+
+<h1>Agregar Stock</h1>
+<div class="text-danger">@ViewBag.Error</div>
+@foreach (var categoria in Model)
+{
+<h2>@Html.DisplayFor(modelItem => categoria.Nombre)</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Stock
+            </th>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Descripción
+            </th>
+            <th>
+                Precio Vigente
+            </th>
+            <th>
+                Cantidad
+            </th>
+            <th>
+                Opciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in categoria.Productos)
+        {
+
+        <tr class="">
+            @{var cantidad = "cantidad" + item.ProductoId;
+                var cero = 0;
+                StockItem stkitem = stk.Where(x => x.ProductoId == item.ProductoId).FirstOrDefault();
+            }
+            <form method="POST" id=@cantidad asp-action="AgregarStock"></form>
+            <td>
+                @if(stkitem != null)
+                {
+                    @stkitem.Cantidad
+                    }
+                    else
+                    {
+                        @cero
+                    }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrecioVigente)
+            </td>
+            <td>
+                <input type="number" name="cantidad" form=@cantidad class="form-control" />
+                <input type="hidden" name="idproducto" value=@item.ProductoId form=@cantidad>
+                <input type="hidden" name="sucursal" value=@TempData["sucursal"] form=@cantidad>
+            </td>
+            <td>
+                <input class="btn btn-primary" asp-action="AgregarStock" form=@cantidad type="submit" value="Agregar">
+            </td>
+
+        </tr>
+           
+        }
+    </tbody>
+</table>
+
+}
+

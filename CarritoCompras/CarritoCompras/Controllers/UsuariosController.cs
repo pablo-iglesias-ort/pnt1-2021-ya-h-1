@@ -58,16 +58,17 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,UserName,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password")] Empleado empleado)
         {
             if (ModelState.IsValid)
-            {
-                usuario.Id = Guid.NewGuid();
-                _context.Add(usuario);
+            {                                
+                empleado.Id = Guid.NewGuid();
+                empleado.FechaAlta = DateTime.Now.Date;                
+                _context.Add(empleado);             
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(usuario);
+            return View(empleado);
         }
 
         // GET: Usuarios/Edit/5
@@ -253,6 +254,7 @@ namespace CarritoCompras.Controllers
                 nuevoCliente.Direccion = cliente.Direccion;                
                 nuevoCliente.UserName = cliente.UserName;
                 nuevoCliente.Password = cliente.Password;
+                nuevoCliente.DNI = cliente.DNI;
                 //seguridad.EncriptarPass(usuario.DNI.ToString());
                 _context.Cliente.Add(nuevoCliente);
 
