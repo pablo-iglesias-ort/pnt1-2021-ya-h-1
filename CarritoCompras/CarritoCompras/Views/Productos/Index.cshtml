@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Activo)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
             <th>
@@ -20,9 +23,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PrecioVigente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Activo)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Categoria)
@@ -37,6 +37,9 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Activo)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
@@ -46,10 +49,7 @@
                 @Html.DisplayFor(modelItem => item.PrecioVigente)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Activo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categoria.CategoriaId)
+                @Html.DisplayFor(modelItem => item.Categoria.Nombre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Foto)

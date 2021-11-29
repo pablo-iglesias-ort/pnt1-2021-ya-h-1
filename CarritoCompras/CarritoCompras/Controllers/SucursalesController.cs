@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarritoCompras.Data;
 using CarritoCompras.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarritoCompras.Controllers
 {
@@ -20,12 +21,14 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Sucursales
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Sucursal.ToListAsync());
         }
 
         // GET: MOstrar productos para agregar al Stock de la Sucursal
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> AgregarProductos(Guid id)
         {
             var categorias = _context.Categoria.Include(n => n.Productos);
@@ -39,6 +42,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Sucursales para hacer una COMPRA
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> SucursalCompra(Guid? id)
         {
             if (id == null)
@@ -54,6 +58,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Sucursales/Details/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -72,6 +77,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Sucursales/Create
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public IActionResult Create()
         {
             return View();
@@ -82,6 +88,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Create([Bind("SucursalId,Nombre,Direccion,Telefono,Email")] Sucursal sucursal)
         {
             if (ModelState.IsValid)
@@ -95,6 +102,7 @@ namespace CarritoCompras.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> AgregarStock(int cantidad, Guid idproducto, Guid sucursal)
         {
             if(cantidad <= 0)
@@ -131,6 +139,7 @@ namespace CarritoCompras.Controllers
             return RedirectToAction(nameof(AgregarProductos), new { id = sucursal });
         }
         // GET: Sucursales/Edit/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -151,6 +160,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Edit(Guid id, [Bind("SucursalId,Nombre,Direccion,Telefono,Email")] Sucursal sucursal)
         {
             if (id != sucursal.SucursalId)
@@ -182,6 +192,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Sucursales/Delete/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -202,6 +213,7 @@ namespace CarritoCompras.Controllers
         // POST: Sucursales/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var sucursal = await _context.Sucursal.FindAsync(id);

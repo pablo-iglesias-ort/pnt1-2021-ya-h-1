@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarritoCompras.Data;
 using CarritoCompras.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarritoCompras.Controllers
 {
@@ -20,6 +21,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Productos
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Index()
         {
             var carritoComprasContext = _context.Producto.Include(p => p.Categoria);
@@ -28,7 +30,7 @@ namespace CarritoCompras.Controllers
 
         public async Task<IActionResult> Seleccionar(Guid Id)
         {
-            var productos = _context.Producto.Where(p => p.CategoriaId == Id);
+            var productos = _context.Producto.Where(p => p.CategoriaId == Id  && p.Activo).Include(p => p.Categoria);
             return View(await productos.ToListAsync());
         }        
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarritoCompras.Data;
 using CarritoCompras.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarritoCompras.Controllers
 {
@@ -21,6 +22,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: CarritoItems
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var carritoComprasContext = _context.CarritoItem.Include(c => c.Carrito).Include(c => c.Producto);
@@ -28,6 +30,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: CarritoItems/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -48,6 +51,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: CarritoItems/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["CarritoId"] = new SelectList(_context.Carrito, "CarritoId", "CarritoId");
@@ -60,6 +64,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("CarritoItemId,CarritoId,ProductoId,ValorUnitario,Cantidad,Subtotal")] CarritoItem carritoItem)
         {
             if (ModelState.IsValid)
@@ -75,6 +80,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: CarritoItems/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -97,6 +103,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(Guid id, [Bind("CarritoItemId,CarritoId,ProductoId,ValorUnitario,Cantidad,Subtotal")] CarritoItem carritoItem)
         {
             if (id != carritoItem.CarritoItemId)
@@ -130,6 +137,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: CarritoItems/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -152,6 +160,7 @@ namespace CarritoCompras.Controllers
         // POST: CarritoItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var carritoItem = await _context.CarritoItem.FindAsync(id);

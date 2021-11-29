@@ -43,13 +43,10 @@ namespace CarritoCompras.Models
         [DataType(DataType.Date)]        
         public DateTime FechaAlta { get; set; }
 
+
         [Required(ErrorMessage = completarObligatorio)]
-        //[RegularExpression(@"^(?=.*?[A-Z])(?=(.*[a-z]){1,})",
-        //    ErrorMessage = "La contraseña debe contener Mayusculas minusculas, numeros y entre 8 y 12 caracteres")]
-        //[StringLength(12)]
-        [MaxLength(10, ErrorMessage = "El campo {0} debe contener {1} caracteres")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        [Display(Name = "Contraseña")]
+        public byte[] Password { get; set; }
 
         [Required]
         public abstract Rol Rol { get; }

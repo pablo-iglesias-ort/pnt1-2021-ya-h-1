@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarritoCompras.Data;
 using CarritoCompras.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarritoCompras.Controllers
 {
@@ -20,6 +21,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Compras
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Index()
         {
             var carritoComprasContext = _context.Compra.Include(c => c.Carrito).Include(c => c.Cliente).Include(c => c.Sucursal);
@@ -27,6 +29,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Compras del Cliente
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> ComprasCliente(Guid id)
         {
             var cliente = _context.Cliente.FirstOrDefault(n => n.Id == id);
@@ -36,9 +39,10 @@ namespace CarritoCompras.Controllers
         }
 
 
-        
+
 
         // GET: Compras/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -61,7 +65,7 @@ namespace CarritoCompras.Controllers
             return View(compra);
         }
 
-        // GET: Compras/Create
+        /* GET: Compras/Create
         public IActionResult Create()
         {
             ViewData["CarritoId"] = new SelectList(_context.Carrito, "CarritoId", "CarritoId");
@@ -70,11 +74,12 @@ namespace CarritoCompras.Controllers
             return View();
         }
 
-        // POST: Compras/Create
+         POST: Compras/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Create([Bind("CompraId,ClienteId,CarritoId,Total,Fecha,SucursalId")] Compra compra)
         {
             if (ModelState.IsValid)
@@ -89,8 +94,10 @@ namespace CarritoCompras.Controllers
             ViewData["SucursalId"] = new SelectList(_context.Sucursal, "SucursalId", "Direccion", compra.SucursalId);
             return View(compra);
         }
+        */
 
-        // GET: GENERAR UNA COMPRA NUEVA A PARTIR DE UN CARRITO Y UNA SUCURSAL    
+        // GET: GENERAR UNA COMPRA NUEVA A PARTIR DE UN CARRITO Y UNA SUCURSAL
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> Comprar(Guid sucursalid, Guid carritoid)
         {
         /*if (1==1)
@@ -191,6 +198,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Edit(Guid id, [Bind("CompraId,ClienteId,CarritoId,Total,Fecha,SucursalId")] Compra compra)
         {
             if (id != compra.CompraId)
@@ -225,6 +233,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Compras/Delete/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -248,6 +257,7 @@ namespace CarritoCompras.Controllers
         // POST: Compras/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var compra = await _context.Compra.FindAsync(id);

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarritoCompras.Data;
 using CarritoCompras.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarritoCompras.Controllers
 {
@@ -20,18 +21,21 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Categorias
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Categoria.ToListAsync());
         }
 
         // GET: Categorias
+        [Authorize]
         public async Task<IActionResult> Seleccionar()
         {
             return View(await _context.Categoria.ToListAsync());
         }
 
         // GET: Categorias/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -50,6 +54,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Categorias/Create
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public IActionResult Create()
         {
             return View();
@@ -60,6 +65,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Create([Bind("CategoriaId,Nombre,Descripcion")] Categoria categoria)
         {
             if (ModelState.IsValid)
@@ -73,6 +79,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Categorias/Edit/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -93,6 +100,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Edit(Guid id, [Bind("CategoriaId,Nombre,Descripcion")] Categoria categoria)
         {
             if (id != categoria.CategoriaId)
@@ -124,6 +132,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Categorias/Delete/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -144,6 +153,7 @@ namespace CarritoCompras.Controllers
         // POST: Categorias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var categoria = await _context.Categoria.FindAsync(id);

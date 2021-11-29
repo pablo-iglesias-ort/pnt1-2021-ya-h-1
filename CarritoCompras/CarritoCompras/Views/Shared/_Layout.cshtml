@@ -9,6 +9,8 @@
 </head>
 <body>
     <header>
+     @if (User.Identity.IsAuthenticated)
+     {
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarritoCompras</a>
@@ -18,67 +20,64 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Creditos">Creditos</a>
-                        </li>
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.IsInRole(nameof(Rol.Administrador)))
                         {
-                            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                                <ul class="navbar-nav flex-grow-1">
-                                    @if (User.IsInRole(nameof(Rol.Administrador)))
-                                    {
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-controller="Productos" asp-action="Index">Productos</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-controller="Compras" asp-action="Index">Compras</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-controller="Sucursales" asp-action="Index">Sucursales</a>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Categorias" asp-action="Seleccionar">Agregar Productos</a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Carritos" asp-action="CarritoCliente" asp-route-id=@User.FindFirst("IdDeUsuario").Value>Carrito</a>
-                                    </li>
-                                    }
-                                    <li class="nav-item float-right">
-                                        <a class="nav-link text-success" asp-area="" asp-controller="Clientes" asp-action="Details" asp-route-id=@User.FindFirst("IdDeUsuario").Value>@User.FindFirst("zaraza").Value</a>
-                                    </li>
-                                    <li class="nav-item float-right">
-                                        <form asp-controller="Usuarios" asp-action="Salir" method="post">
-                                            <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Salir</button> @*agrego estilo al botón salir*@
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Productos" asp-action="Index">Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Compras" asp-action="Index">Compras</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Sucursales" asp-action="Index">Sucursales</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Creditos">Creditos</a>
+                            </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="btn btn-primary" asp-area="" asp-controller="Usuarios" asp-action="Ingresar">Ingresar</a>
+                                <a class="nav-link" asp-area="" asp-controller="Categorias" asp-action="Seleccionar">Agregar Productos</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Carritos" asp-action="CarritoCliente" asp-route-id=@User.FindFirst("IdDeUsuario").Value>Carrito</a>
                             </li>
                         }
-
                     </ul>
                 </div>
+                <a class="nav-link text-success" asp-area="" asp-controller="Clientes" asp-action="Details" asp-route-id=@User.FindFirst("IdDeUsuario").Value>@User.FindFirst("NombreUsuario").Value</a>
+                <form asp-controller="Usuarios" asp-action="Salir" method="post">
+                    <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Salir</button> @*agrego estilo al botón salir*@
+                </form>
+            </div>                
+            </nav>
+        }
+        else
+        {
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarritoCompras</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <a class="btn btn-primary" asp-area="" asp-controller="Usuarios" asp-action="Ingresar">Ingresar</a>                
             </div>
-        </nav>
-    </header>
+    </nav>
+            
+        }
+
+
+            </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -87,7 +86,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - CarritoCompras - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - CarritoCompras - <a asp-area="" asp-controller="Home" asp-action="Creditos">Copyright</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

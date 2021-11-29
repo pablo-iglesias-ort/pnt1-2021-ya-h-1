@@ -29,11 +29,15 @@ namespace CarritoCompras.Controllers
         public IActionResult Index()
         {
             var categorias = _context.Categoria
-                .Include(c => c.Productos);
+                                             .Select(c => new Categoria
+                                             {
+                                                 Nombre = c.Nombre,
+                                                 Productos = c.Productos.Where(p => p.Activo).ToList()
+                                             });
             return View(categorias);
         }
 
-        [Authorize(Roles = nameof(Rol.Cliente))]
+        [AllowAnonymous]
         public IActionResult Creditos()
         {
             return View();

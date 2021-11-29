@@ -21,6 +21,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Carritos
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Index()
         {
             var carritoComprasContext = _context.Carrito.Include(c => c.Cliente);
@@ -28,6 +29,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Carritos
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> CarritoCliente(Guid Id)
         {            
             var carrito = _context.Carrito.Include(n => n.CarritosItems)
@@ -59,6 +61,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Carritos/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Apellido");
@@ -70,6 +73,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("CarritoId,ClienteId,Activo,Subtotal")] Carrito carrito)
         {
             if (ModelState.IsValid)
@@ -133,6 +137,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(Guid id, [Bind("CarritoId,ClienteId,Activo,Subtotal")] Carrito carrito)
         {
             if (id != carrito.CarritoId)
@@ -165,6 +170,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Carritos/Edit/5
+        [Authorize]
         public async Task<IActionResult> EditarItem(Guid? id, int Cantidad)
         {
             if (id == null)
@@ -174,6 +180,7 @@ namespace CarritoCompras.Controllers
 
             var carritoItem = await _context.CarritoItem
                 .Include(n => n.Producto)
+                //.ThenInclude(n => n.Categoria)
                 .Include(n => n.Carrito)
                 .FirstOrDefaultAsync(n => n.CarritoItemId == id);
             if (carritoItem == null)
@@ -189,6 +196,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> EditarItem(Guid id, CarritoItem carritoItem)
         {
             if (id != carritoItem.CarritoItemId)
@@ -223,6 +231,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Carritos/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -244,6 +253,7 @@ namespace CarritoCompras.Controllers
         // POST: Carritos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var carrito = await _context.Carrito.FindAsync(id);
@@ -253,6 +263,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Carritos/Delete/5
+        [Authorize]
         public async Task<IActionResult> RemoveItem(Guid? id)
         {
             if (id == null)
@@ -275,6 +286,7 @@ namespace CarritoCompras.Controllers
         // POST: Carritos/Delete/5
         [HttpPost, ActionName("RemoveItem")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> RemoveItem1(Guid id)
         {
             var carritoItem = await _context.CarritoItem
@@ -292,6 +304,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: VACIAR EL CARRITO
+        [Authorize]
         public async Task<IActionResult> Vaciar(Guid? id)
         {
             if (id == null)

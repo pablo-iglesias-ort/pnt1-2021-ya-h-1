@@ -1,4 +1,5 @@
-﻿using CarritoCompras.Models;
+﻿using CarritoCompras.Controllers;
+using CarritoCompras.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,9 @@ namespace CarritoCompras.Data
 {
 	public static class InicializacionDeDatos
 	{
-		public static void Inicializar(CarritoComprasContext context)
+        private static ISeguridad seguridad = new Seguridad();
+
+        public static void Inicializar(CarritoComprasContext context)
 		{
 			context.Database.EnsureCreated();
 
@@ -27,7 +30,7 @@ namespace CarritoCompras.Data
 					nuevoEmpleado.UserName = "admin";
 					nuevoEmpleado.Nombre = "Pedro";
 					nuevoEmpleado.Apellido = "Picapiedra";					
-					nuevoEmpleado.Password = "admin";
+					nuevoEmpleado.Password = seguridad.EncriptarPass("admin");
 					nuevoEmpleado.Telefono = "12345678";
 					nuevoEmpleado.Direccion = "balbal 1212";
 					nuevoEmpleado.FechaAlta = DateTime.Now;
@@ -38,7 +41,7 @@ namespace CarritoCompras.Data
 					nuevoCliente.UserName = "susan";
 					nuevoCliente.Nombre = "Susana";
 					nuevoCliente.Apellido = "Gimenez";
-					nuevoCliente.Password = "susan";
+					nuevoCliente.Password = seguridad.EncriptarPass("susan");
 					nuevoCliente.DNI = "20555666";
 					nuevoCliente.Telefono = "12345678";
 					nuevoCliente.Direccion = "balbal 1212";
@@ -50,7 +53,7 @@ namespace CarritoCompras.Data
 					nuevoCliente1.UserName = "pepe";
 					nuevoCliente1.Nombre = "Pepe";
 					nuevoCliente1.Apellido = "Cantinflas";
-					nuevoCliente1.Password = "1234";
+					nuevoCliente1.Password = seguridad.EncriptarPass("1234");
 					nuevoCliente1.DNI = "10632226";
 					nuevoCliente1.Telefono = "12345678";
 					nuevoCliente1.Direccion = "balbal 1212";
@@ -89,6 +92,7 @@ namespace CarritoCompras.Data
 					nuevoProducto.Nombre = "Desodorante Rexona";
 					nuevoProducto.Descripcion = "Rico Desororante";
 					nuevoProducto.Activo = true;
+					nuevoProducto.Foto = "rexona.jpg";
 					nuevoProducto.PrecioVigente = 254;
 					nuevoProducto.CategoriaId = categoria.CategoriaId;
 
@@ -99,6 +103,7 @@ namespace CarritoCompras.Data
 						Activo = true,
 						Descripcion = "Axe lomejor",
 						PrecioVigente = 123,
+						Foto = "axe.jpg",
 						CategoriaId = categoria.CategoriaId
 					};
 
@@ -107,6 +112,7 @@ namespace CarritoCompras.Data
 					nuevoProducto2.Nombre = "Televisor Phillips";
 					nuevoProducto2.Descripcion = "Televisión de 12'";
 					nuevoProducto2.Activo = true;
+					nuevoProducto2.Foto = "phillips.jpg";
 					nuevoProducto2.PrecioVigente = 10548;
 					nuevoProducto2.CategoriaId = categoria1.CategoriaId;
 

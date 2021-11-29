@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarritoCompras.Data;
 using CarritoCompras.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarritoCompras.Controllers
 {
     public class ClientesController : Controller
     {
         private readonly CarritoComprasContext _context;
+        private readonly ISeguridad seguridad = new Seguridad();
 
         public ClientesController(CarritoComprasContext context)
         {
@@ -20,12 +22,14 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Clientes
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Cliente.ToListAsync());
         }
 
         // GET: Clientes/Details/5
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -44,6 +48,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Clientes/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -67,6 +72,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Clientes/Edit/5
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -87,17 +93,18 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("DNI,CarritoId,Id,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password,UserName")] Cliente cliente)
+        [Authorize(Roles = nameof(Rol.Cliente))]
+        public async Task<IActionResult> Edit(Guid id, [Bind("DNI,CarritoId,Id,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password,UserName")] Cliente cliente, string pass)
         {
             if (id != cliente.Id)
             {
                 return NotFound();
             }
-
+            cliente.Password = seguridad.EncriptarPass(pass);
             if (ModelState.IsValid)
             {
                 try
-                {
+                {                    
                     _context.Update(cliente);
                     await _context.SaveChangesAsync();
                 }
@@ -118,6 +125,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Clientes/Delete/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -138,6 +146,7 @@ namespace CarritoCompras.Controllers
         // POST: Clientes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var cliente = await _context.Cliente.FindAsync(id);

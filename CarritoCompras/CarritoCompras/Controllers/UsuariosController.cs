@@ -16,13 +16,15 @@ namespace CarritoCompras.Controllers
 {
     public class UsuariosController : Controller
     {
-        private readonly CarritoComprasContext _context;
+        private readonly CarritoComprasContext _context;        
+        private readonly ISeguridad seguridad = new Seguridad();
 
         public UsuariosController(CarritoComprasContext context)
         {
             _context = context;
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
@@ -30,6 +32,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Usuarios/Details/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -48,6 +51,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Usuarios/Create
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public IActionResult Create()
         {
             return View();
@@ -58,6 +62,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Create([Bind("Id,UserName,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password")] Empleado empleado)
         {
             if (ModelState.IsValid)
@@ -72,6 +77,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Usuarios/Edit/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -92,6 +98,7 @@ namespace CarritoCompras.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,UserName,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password")] Usuario usuario)
         {
             if (id != usuario.Id)
@@ -123,6 +130,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Usuarios/Delete/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -143,6 +151,7 @@ namespace CarritoCompras.Controllers
         // POST: Usuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var usuario = await _context.Usuario.FindAsync(id);
@@ -157,6 +166,7 @@ namespace CarritoCompras.Controllers
         }
 
         // GET: Usuario
+        [AllowAnonymous]
         public IActionResult Ingresar(string returnUrl)
         {
             TempData["UrlIngreso"] = returnUrl;
@@ -164,6 +174,7 @@ namespace CarritoCompras.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Ingresar(string NombreUsuario, string Password)
         {
             // Guardamos la URL a la que debemos redirigir al usuario
@@ -179,7 +190,8 @@ namespace CarritoCompras.Controllers
                 {
 
                     // Verificamos que coincida la contraseña
-                    if (Password.Equals(user.Password))
+                    var contraseña = seguridad.EncriptarPass(Password);
+                    if (contraseña.SequenceEqual(user.Password))
                     {
                         // Creamos los Claims (credencial de acceso con informacion del usuario)-- cookies
                         ClaimsIdentity identidad = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -192,7 +204,7 @@ namespace CarritoCompras.Controllers
                         identidad.AddClaim(new Claim(ClaimTypes.Role, user.Rol.ToString()));
                         // Agregamos el Id de Usuario
                         identidad.AddClaim(new Claim("IdDeUsuario", user.Id.ToString()));
-                        identidad.AddClaim(new Claim("zaraza", user.Nombre.ToString()));
+                        identidad.AddClaim(new Claim("NombreUsuario", user.Nombre.ToString()));
 
 
                         ClaimsPrincipal principal = new ClaimsPrincipal(identidad);
@@ -221,6 +233,7 @@ namespace CarritoCompras.Controllers
 
         [Authorize]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Salir()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -228,7 +241,7 @@ namespace CarritoCompras.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
+        [AllowAnonymous]
         public IActionResult AccesoDenegado()
         {
             return View();
@@ -242,32 +255,44 @@ namespace CarritoCompras.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Registrarse(Cliente cliente, string pass)
+        [AllowAnonymous]
+        public async Task<IActionResult> Registrarse(Cliente cliente, string pass, string returnUrl)
         {
-            if (ModelState.IsValid)
+            var usuarioViejo = _context.Cliente.FirstOrDefaultAsync(n => n.UserName == cliente.UserName);
+            TempData["UrlIngreso"] = returnUrl;
+
+            if (usuarioViejo.Result == null)
             {
-                var nuevoCliente = new Cliente();
-                nuevoCliente.Id = Guid.NewGuid();
-                nuevoCliente.Nombre = cliente.Nombre;
-                nuevoCliente.Apellido = cliente.Apellido;
-                nuevoCliente.Telefono = cliente.Telefono;
-                nuevoCliente.Direccion = cliente.Direccion;                
-                nuevoCliente.UserName = cliente.UserName;
-                nuevoCliente.Password = cliente.Password;
-                nuevoCliente.DNI = cliente.DNI;
-                //seguridad.EncriptarPass(usuario.DNI.ToString());
-                _context.Cliente.Add(nuevoCliente);
+                if (ModelState.IsValid)
+                {                    
+                    var nuevoCliente = new Cliente();
+                    nuevoCliente.Id = Guid.NewGuid();
+                    nuevoCliente.Nombre = cliente.Nombre;
+                    nuevoCliente.Apellido = cliente.Apellido;
+                    nuevoCliente.Telefono = cliente.Telefono;
+                    nuevoCliente.Direccion = cliente.Direccion;                
+                    nuevoCliente.UserName = cliente.UserName;
+                    nuevoCliente.Password = seguridad.EncriptarPass(pass); 
+                    nuevoCliente.DNI = cliente.DNI;
+                    nuevoCliente.FechaAlta = DateTime.Now;
+                    _context.Cliente.Add(nuevoCliente);
 
-                var carrito = new Carrito
-                {
-                    CarritoId = Guid.NewGuid(),
-                    ClienteId = nuevoCliente.Id,
-                    Activo = true
-                };
-                _context.Carrito.Add(carrito);
+                    var carrito = new Carrito
+                    {
+                        CarritoId = Guid.NewGuid(),
+                        ClienteId = nuevoCliente.Id,
+                        Activo = true
+                    };
+                    _context.Carrito.Add(carrito);
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Ingresar));            
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Ingresar));            
+                }
+            }
+            else
+            {                
+                ViewBag.Error = "El nombre de usuario "+cliente.UserName+ " ya existe. Ingrese uno distinto.";
+                return View(cliente);
             }
             return View(cliente);
         }

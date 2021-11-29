@@ -3,19 +3,26 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1 class="visually-hidden">Carrito App</h1>
-
-<div class="px-4 py-5 my-5 text-center">
+<div class="px-4 my-5 text-center">
     <h1 class="display-5 fw-bold">Carrito App</h1>
     <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">Bienvenido a la mejor aplicación de Carrito de Compras de la zona.</p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <a class="btn btn btn-outline-primary btn-lg px-4 gap-3" asp-area="" asp-controller="Usuarios" asp-action="Ingresar">Ingresar</a>
-            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Salir</button>
-        </div>
-    </div>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <p class="lead mb-4">Bienvenido a la mejor aplicación de Carrito de Compras de la zona.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a class="btn btn btn-outline-primary btn-lg px-4 gap-3 m-1" asp-area="" asp-controller="Usuarios" asp-action="Ingresar">Ingresar</a>
+                <a class="btn btn btn-outline-secondary btn-lg px-4 gap-3 m-1" asp-area="" asp-controller="Usuarios" asp-action="Registrarse">Registrarse</a>
+            </div>   
+        }
+         else
+         {
+            <p class="lead mb-4">Bienvenido <b> @User.FindFirst("NombreUsuario").Value</b> a la mejor aplicación de Carrito de Compras de la zona.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a class="btn btn btn-outline-primary btn-lg px-4 gap-3" asp-area="" asp-controller="Categorias" asp-action="Seleccionar">Comprar</a>
+            </div>         
+         }
+     </div>
 </div>
-
 <h1>Productos</h1>
 
 @foreach (var categoria in Model)
@@ -33,7 +40,7 @@
                 </th>
                 <th>
                     Precio Vigente
-                </th>                
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -48,7 +55,7 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PrecioVigente)
-                    </td>                                  
+                    </td>
                 </tr>
             }
         </tbody>
