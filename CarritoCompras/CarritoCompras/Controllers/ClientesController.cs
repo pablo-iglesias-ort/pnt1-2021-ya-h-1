@@ -100,6 +100,11 @@ namespace CarritoCompras.Controllers
             {
                 return NotFound();
             }
+            if (!seguridad.ValidarPass(pass))
+            {
+                ViewBag.Error = "La Contraseña no es válida: la contraseña requiere 8 caractéres; una mayúscula, minúscula y un número.";
+                return View(cliente);
+            }
             cliente.Password = seguridad.EncriptarPass(pass);
             if (ModelState.IsValid)
             {

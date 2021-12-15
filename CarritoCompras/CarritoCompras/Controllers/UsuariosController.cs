@@ -63,15 +63,40 @@ namespace CarritoCompras.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(Rol.Administrador))]
-        public async Task<IActionResult> Create([Bind("Id,UserName,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password")] Empleado empleado)
+        public async Task<IActionResult> Create([Bind("Id,UserName,Nombre,Apellido,Telefono,Direccion,FechaAlta,Password")] Empleado empleado, string pass)
         {
-            if (ModelState.IsValid)
-            {                                
-                empleado.Id = Guid.NewGuid();
-                empleado.FechaAlta = DateTime.Now.Date;                
-                _context.Add(empleado);             
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            var usuarioViejo = _context.Cliente.FirstOrDefaultAsync(n => n.UserName == empleado.UserName);            
+
+            if (usuarioViejo.Result == null)
+            {
+                if (ModelState.IsValid && seguridad.ValidarPass(pass))
+                {
+                    var nuevoEmpleado = new Empleado();
+                    nuevoEmpleado.Id = Guid.NewGuid();
+                    nuevoEmpleado.Nombre = empleado.Nombre;
+                    nuevoEmpleado.Apellido = empleado.Apellido;
+                    nuevoEmpleado.Telefono = empleado.Telefono;
+                    nuevoEmpleado.Direccion = empleado.Direccion;
+                    nuevoEmpleado.UserName = empleado.UserName;
+                    nuevoEmpleado.Password = seguridad.EncriptarPass(pass);
+                    nuevoEmpleado.FechaAlta = DateTime.Now;
+                    _context.Empleado.Add(nuevoEmpleado);                
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    if (!seguridad.ValidarPass(pass))
+                    {
+                        ViewBag.Error = "La Contraseña no es válida: la contraseña requiere 8 caractéres; una mayúscula, minúscula y un número.";
+                    }
+                    return View(empleado);
+                }
+            }
+            else
+            {
+                ViewBag.Error = "El nombre de usuario " + empleado.UserName + " ya existe. Ingrese uno distinto.";
+                return View(empleado);
             }
             return View(empleado);
         }
@@ -263,7 +288,7 @@ namespace CarritoCompras.Controllers
 
             if (usuarioViejo.Result == null)
             {
-                if (ModelState.IsValid)
+                if (ModelState.IsValid && seguridad.ValidarPass(pass))
                 {                    
                     var nuevoCliente = new Cliente();
                     nuevoCliente.Id = Guid.NewGuid();
@@ -286,7 +311,15 @@ namespace CarritoCompras.Controllers
                     _context.Carrito.Add(carrito);
 
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Ingresar));            
+                    return RedirectToAction(nameof(Ingresar));
+                }
+                else
+                {
+                    if (!seguridad.ValidarPass(pass))
+                    {
+                        ViewBag.Error = "La Contraseña no es válida: la contraseña requiere 8 caractéres; una mayúscula, minúscula y un número.";
+                    }
+                    return View(cliente);
                 }
             }
             else

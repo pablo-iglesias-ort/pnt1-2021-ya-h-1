@@ -42,9 +42,7 @@ namespace CarritoCompras.Models
         [Required(ErrorMessage = completarObligatorio)]
         [DataType(DataType.Date)]        
         public DateTime FechaAlta { get; set; }
-
-
-        [Required(ErrorMessage = completarObligatorio)]
+                        
         [Display(Name = "Contraseña")]
         public byte[] Password { get; set; }
 
